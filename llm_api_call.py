@@ -1,5 +1,5 @@
 from handyllm import OpenAIClient
-from handyllm import PromptConverter
+from handyllm import PromptConverter, stream_chat
 import os
 import json
 import yaml
@@ -33,11 +33,14 @@ def call_azure_api(chat):
 		response = client.chat(
 			model="gpt-4-1106-preview",  # 注意模型名字是azure里定义的名字，不一定是这个
 			messages=chat,
+			stream=True
 			# response_format={ "type": "json_object" }, 
 		).call()  ## note .call() here
-		result = response['choices'][0]['message']['content']
+		result = ""
 		print("---------- Azure API response ----------")
-		print(result)
+		for text in stream_chat(response):
+			result += text
+			print(text, end='')
 		print("----------------------------------------")
 		return result
 
