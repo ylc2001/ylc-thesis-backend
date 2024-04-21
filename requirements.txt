@@ -1,0 +1,13 @@
+Flask
+python-dotenv
+eventlet
+gunicorn
+loguru
+requests
+ipython
+# mediapipe
+opencv-python-headless
+tqdm
+handyllm
+pyvis
+pyyaml

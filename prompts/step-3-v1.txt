@@ -1,0 +1,315 @@
+$system$
+你是一个分析学生做题思路的助手，根据给定的题目和解题过程中的按时间顺序的信息记录，分析每一步结论的依据。
+
+$user$
+解题的过程可以看作一个从现有信息出发，不断通过推理、计算、推测、分析等方式扩充已知信息，直到得到所求结果的过程。我们认为学生的每一步操作都产生一个或多个信息，这个信息可以是下面三类中的一个：
+[fact]: 事实，学生在此处通过推理认为它是正确的信息。这类信息一定要有严谨的数学推导或计算过程才可以得到，否则应当改为 assert。
+[assert]: 猜想，学生并不是十分肯定正确的信息，并不是严谨推理证明得到的，但是可能作为接下来思考的依据
+[intent]: 想求的/断言，学生想要通过计算或证明得到的信息，现在还不知道或还有待证明
+对于一个学生求解一个给定的数学问题的过程，我会把所有关于这次解题的相关信息给你。这些信息包括：
+1. 题目本身
+2. 解题过程每一步操作产生的信息，是一个按时间顺序的序列，每一条信息都要有唯一的编号。这些信息已经被分类为上述 3 类中的一种。
+
+你的任务是通过分析这些内容，找出学生的每一步操作产生的具体依据，依据可能是当前步骤之前的信息（依据的信息以其唯一编号表示），也可能是来自高中的数学知识（可能不在已有的信息中，需要你根据你的知识来总结具体用到的是哪个定律或公式）。对于[fact]，其依据必须是目前已有的 fact 或具体数学知识，如果这个 fact 是题目所给，则没有依据；对于[assert]和[intent]，依据可以是学生产生这个猜想或意图的根据、灵感来源，数学上可以不严谨。把每一条信息所依据的信息或数学知识加到这条信息的表示中，把这个题目所用到的所有数学知识单独整理到最前面并编号，要以json格式输出这些结果。
+
+$assistant$
+好的，我明白
+
+$user$
+[题目]
+已知圆锥的顶点为P，底面圆心为 O, AB 为底面直径，角APB=120°，PA=2，点C在底面圆周上，且二面角P-AC-O为45°，则：
+A. 该圆雉的体积为 $\pi$
+B. 该圆雉的侧面积为 $4 \sqrt{3} \pi$
+C. $A C=2 \sqrt{2}$
+D. $\triangle P A C$ 的面积为 $\sqrt{3}$
+
+[信息序列]
+```json
+[
+  { "id": 1, "type": "[fact]", "content": "圆锥的顶点为P" },
+  { "id": 2, "type": "[fact]", "content": "底面圆心为O" },
+  { "id": 3, "type": "[fact]", "content": "AB为底面直径" },
+  { "id": 4, "type": "[fact]", "content": "角APB=120°" },
+  { "id": 5, "type": "[fact]", "content": "PA=2" },
+  { "id": 6, "type": "[fact]", "content": "点C在底面圆周上" },
+  { "id": 7, "type": "[fact]", "content": "二面角P-AC-O为45°" },
+  { "id": 8, "type": "[intent]", "content": "判断 A 选项是否正确" },
+  { "id": 9, "type": "[intent]", "content": "圆锥的体积" },
+  { "id": 10, "type": "[intent]", "content": "AO" },
+  { "id": 11, "type": "[intent]", "content": "PO" },
+  { "id": 12, "type": "[assert]", "content": "△AOP是直角三角形" },
+  { "id": 13, "type": "[fact]", "content": "PO平分角APB" },
+  { "id": 14, "type": "[fact]", "content": "角APO=60°" },
+  { "id": 15, "type": "[fact]", "content": "△AOP是直角三角形" },
+  { "id": 16, "type": "[fact]", "content": "AO=√3" },
+  { "id": 17, "type": "[fact]", "content": "PO=1" },
+  { "id": 18, "type": "[fact]", "content": "圆锥的体积=π" },
+  { "id": 19, "type": "[assert]", "content": "选项A正确" }
+]
+```
+
+$assistant$
+```json
+[
+  { 
+    "id": 1001, 
+    "type": "[knowledge]", 
+    "content": " 圆锥体积公式: Volume = (1/3)πr²h",
+  },
+  { 
+    "id": 1002, 
+    "type": "[knowledge]", 
+    "content": "圆锥的基本性质",
+  },
+  { 
+    "id": 1003, 
+    "type": "[knowledge]", 
+    "content": " 特殊直角三角形的基本性质 (30°-60°-90° 三角形)",
+  },
+  { 
+    "id": 9, 
+    "type": "[intent]", 
+    "content": "圆锥的体积",
+    "basis": [8] 
+  },
+  { 
+    "id": 10, 
+    "type": "[intent]", 
+    "content": "AO",
+    "basis": [9, 1001]
+  },
+  { 
+    "id": 11, 
+    "type": "[intent]", 
+    "content": "PO",
+    "basis": [9, 1001]
+  },
+  { 
+    "id": 12, 
+    "type": "[assert]", 
+    "content": "△AOP是直角三角形",
+    "basis": [1, 2] 
+  },
+  { 
+    "id": 13, 
+    "type": "[fact]", 
+    "content": "PO平分角APB",
+    "basis": [1, 2, 3, 1002] 
+  },
+  { 
+    "id": 14, 
+    "type": "[fact]", 
+    "content": "角APO=60°",
+    "basis": [4, 13] 
+  },
+  { 
+    "id": 15, 
+    "type": "[fact]", 
+    "content": "△AOP是直角三角形",
+    "basis": [1, 2, 3, 1002] 
+  },
+  { 
+    "id": 16, 
+    "type": "[fact]", 
+    "content": "AO=√3",
+    "basis": [5, 14, 15, 1003] 
+  },
+  { 
+    "id": 17, 
+    "type": "[fact]", 
+    "content": "PO=1",
+    "basis": [5, 14, 15, 1003] 
+  },
+  { 
+    "id": 18, 
+    "type": "[fact]", 
+    "content": "圆锥的体积=π",
+    "basis": [16, 17, 1001] 
+  },
+  { 
+    "id": 19, 
+    "type": "[assert]", 
+    "content": "选项A正确",
+    "basis": ["18"] 
+  }
+]
+```
+$user$
+[题目]
+已知函数 $f(x)=a\left(\mathrm{e}^x+a\right)-x$.
+讨论 $f(x)$ 的单调性.
+
+[信息序列]
+```json
+[
+  { "id": 1, "type": "[fact]", "content": "函数$f(x)=a(e^x+a)-x$" },
+  { "id": 2, "type": "[intent]", "content": "讨论$f(x)$的单调性" },
+  { "id": 3, "type": "[intent]", "content": "求$f(x)$的导数" },
+  { "id": 4, "type": "[fact]", "content": "导数$f'(x)=ae^x-1$" },
+  { "id": 5, "type": "[fact]", "content": "导数$f'(x)$与$a$的值有关" },
+  { "id": 6, "type": "[fact]", "content": "当$a=0$时，$f'(x)=-1$" },
+  { "id": 7, "type": "[fact]", "content": "$f(x)$在$a=0$时单调递减" },
+  { "id": 8, "type": "[intent]", "content": "分类讨论$a<0$时$f(x)$的 单调性" },
+  { "id": 9, "type": "[fact]", "content": "当$a<0$时，$ae^x$始终小于0" },
+  { "id": 10, "type": "[fact]", "content": "$f(x)$在$a<0$时单调递减" },
+  { "id": 11, "type": "[intent]", "content": "分类讨论$a>0$时$f(x)$的单调性" },
+  { "id": 12, "type": "[assert]", "content": "导数$f'(x)$在某处由负变正" },
+  { "id": 13, "type": "[assert]", "content": "导数$f'(x)$为0的点是$x=-\\ln(a)$" },
+  { "id": 14, "type": "[fact]", "content": "$f(x)$在$x=-\\ln(a)$左侧单调递减" },
+  { "id": 15, "type": "[fact]", "content": "$f(x)$在$x=-\\ln(a)$右侧单调递增" },
+  { "id": 16, "type": "[fact]", "content": "$f(x)$的单调性讨论完毕" }
+]
+```
+
+$assistant$
+```json
+[
+  {
+    "id": 1001,
+    "type": "[knowledge]",
+    "content": "如果函数在区间内的导数大于0，则在该区间内单调递增; 如果小于0，则在该区间内单调递减"
+  },
+  {
+    "id": 1002,
+    "type": "[knowledge]",
+    "content": "求函数单调性的常用方法是求导数"
+  },
+  {
+    "id": 1003,
+    "type": "[knowledge]",
+    "content": "指数函数的导数，对于e^x，导数是e^x"
+  },
+  {
+    "id": 1004,
+    "type": "[knowledge]",
+    "content": "常数的导数为0" 
+  },
+  {
+    "id": 1005,
+    "type": "[knowledge]",
+    "content": "一次函数(ax)的导数是其系数" 
+  },
+  {
+    "id": 1006,
+    "type": "[knowledge]",
+    "content": "指数函数基本性质" 
+  },
+  {
+    "id": 3,
+    "type": "[intent]",
+    "content": "求$f(x)$的导数",
+    "basis": [1, 2, 1002] 
+  },
+  {
+    "id": 4,
+    "type": "[fact]",
+    "content": "导数$f'(x)=ae^x-1$",
+    "basis": [1, 1003, 1004, 1005] 
+  },
+  {
+    "id": 5,
+    "type": "[fact]",
+    "content": "导数$f'(x)$与$a$的值有关",
+    "basis": [4] 
+  },
+  {
+    "id": 6,
+    "type": "[fact]",
+    "content": "当$a=0$时，$f'(x)=-1$",
+    "basis": [4] 
+  },
+  {
+    "id": 7,
+    "type": "[fact]",
+    "content": "$f(x)$在$a=0$时单调递减",
+    "basis": [6, 1001] 
+  },
+  {
+    "id": 8,
+    "type": "[intent]",
+    "content": "分类讨论$a<0$时$f(x)$的单调性",
+    "basis": [2, 4, 5] 
+  },
+  {
+    "id": 9,
+    "type": "[fact]",
+    "content": "当$a<0$时，$ae^x$始终小于0",
+    "basis": [4, 1006] 
+  },
+  {
+    "id": 10,
+    "type": "[fact]",
+    "content": "$f(x)$在$a<0$时单调递减",
+    "basis": [9, 1001] 
+  },
+  {
+    "id": 11,
+    "type": "[intent]",
+    "content": "分类讨论$a>0$时$f(x)$的单调性",
+    "basis": [2, 4, 5] 
+  },
+  {
+    "id": 12,
+    "type": "[assert]",
+    "content": "导数$f'(x)$在某处由负变正",
+    "basis": [4, 5] 
+  },
+  {
+    "id": 13,
+    "type": "[assert]",
+    "content": "导数$f'(x)$为0的点是$x=-\\ln(a)$",
+    "basis": [4, 12] 
+  },
+  {
+    "id": 14,
+    "type": "[fact]",
+    "content": "$f(x)$在$x=-\\ln(a)$左侧单调递减",
+    "basis": [12, 13, 1001] 
+  },
+  {
+    "id": 15,
+    "type": "[fact]",
+    "content": "$f(x)$在$x=-\\ln(a)$右侧单调递增",
+    "basis": [12, 13, 1001] 
+  },
+  {
+    "id": 16,
+    "type": "[fact]",
+    "content": "$f(x)$的单调性讨论完毕",
+    "basis": [7, 10, 14, 15] 
+  }
+]
+```
+
+$user$
+[题目]
+已知圆锥的顶点为P，底面圆心为 O, AB 为底面直径，角APB=120°，PA=2，点C在底面圆周上，且二面角P-AC-O为45°，则：
+A. 该圆雉的体积为 $\pi$
+B. 该圆雉的侧面积为 $4 \sqrt{3} \pi$
+C. $A C=2 \sqrt{2}$
+D. $\triangle P A C$ 的面积为 $\sqrt{3}$
+
+[信息序列]
+```json
+[
+  { "id": 1, "type": "[fact]", "content": "圆锥的顶点为P" },
+  { "id": 2, "type": "[fact]", "content": "底面圆心为O" },
+  { "id": 3, "type": "[fact]", "content": "AB为底面直径" },
+  { "id": 4, "type": "[fact]", "content": "角APB=120°" },
+  { "id": 5, "type": "[fact]", "content": "PA=2" },
+  { "id": 6, "type": "[fact]", "content": "点C在底面圆周上" },
+  { "id": 7, "type": "[fact]", "content": "二面角P-AC-O为45°" },
+  { "id": 8, "type": "[intent]", "content": "计算AC的长度" },
+  { "id": 9, "type": "[fact]", "content": "OQ⊥AC" },
+  { "id": 10, "type": "[fact]", "content": "△PQO是45°的直角三角形" },
+  { "id": 11, "type": "[fact]", "content": "OQ=1" },
+  { "id": 12, "type": "[assert]", "content": "△AQO也是直角三角形" },
+  { "id": 13, "type": "[intent]", "content": "计算AQ的长度" },
+  { "id": 14, "type": "[fact]", "content": "AO的长度为√3" },
+  { "id": 15, "type": "[fact]", "content": "利用勾股定理得出AQ=√(3-1)=√2" },
+  { "id": 16, "type": "[fact]", "content": "AO=OC" },
+  { "id": 17, "type": "[fact]", "content": "AQ=QC" },
+  { "id": 18, "type": "[fact]", "content": "AC=2√2" },
+  { "id": 19, "type": "[assert]", "content": "选项C正确" }
+]
+```
