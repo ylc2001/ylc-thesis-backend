@@ -11,3 +11,4 @@ tqdm
 handyllm
 pyvis
 pyyaml
+zhipuai

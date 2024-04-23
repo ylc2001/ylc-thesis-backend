@@ -3,14 +3,17 @@ from handyllm import PromptConverter, stream_chat
 import os
 import json
 import yaml
+from zhipuai import ZhipuAI
 
 # 说明：如果测试新的题目数据，输入要放到step_1最下面，$user$里面
 # 之后的过程是自动化的
 # 万一最后格式有问题没有输出到json文件，去终端拷贝输出手动搞
 # 每一步耗时在 30s 左右，总流程一分半，别急
 
+with open('config.yaml', 'r') as file:
+	config = yaml.safe_load(file)
 with open('__input.yaml', 'r') as file:
-	raw_data = yaml.safe_load(file)
+	input_data = yaml.safe_load(file)
 # promt 文件存在 ./dir_name/step_x.txt
 audio_text_promt = "audio_text.txt"
 step_1 = "step-1-v3.txt"
@@ -25,7 +28,7 @@ def call_azure_api(chat):
 	return: str, response from Azure API
 	'''
 	with OpenAIClient(
-		api_key='a9ee6f57f71c4b80beea75401f74b04c', 
+		api_key=config["azure_api_key"], 
 		api_base='https://pcg-west-us.openai.azure.com/', 
 		api_type='azure', 
 		api_version='2023-12-01-preview'  # 这个是哪来的？不敢动
@@ -41,15 +44,32 @@ def call_azure_api(chat):
 		for text in stream_chat(response):
 			result += text
 			print(text, end='')
-		print("----------------------------------------")
+		print("\n----------------------------------------")
 		return result
+	
+def call_glm_api(chat):
+	client = ZhipuAI(api_key=config["zhipuai_api_key"])
+	response = client.chat.completions.create(
+            model="glm-4",  # 填写需要调用的模型名称
+            messages=chat,
+            stream=True,
+        )
+	result = ""
+	print("---------- ChatGLM API response ----------")
+	for (i, chunk) in enumerate(response):
+		result += chunk.choices[0].delta.content
+		print(chunk.choices[0].delta.content, end='')
+	print("\n----------------------------------------")
+	return result
+        
 
 converter = PromptConverter()
 chat_audio = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, audio_text_promt))
-chat_audio[1]["content"] += raw_data["think_aloud"]
+chat_audio[1]["content"] += input_data["think_aloud"]
 print(json.dumps(chat_audio, indent=4, ensure_ascii=False))
 print(">>> FIX AUDIO TEXT <<<")
 fixed_audio_text = call_azure_api(chat_audio)
+fixed_audio_text = call_glm_api(chat_audio)
 
 # file_path_1 = os.path.join(os.getcwd(), dir_name, step_1)
 # chat_1 = converter.rawfile2chat(file_path_1)
