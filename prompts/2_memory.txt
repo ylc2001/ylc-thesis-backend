@@ -1,0 +1,103 @@
+$system$
+你是一个分析学生做题思路的助手，给定题目和解题过程中的每一步操作，分析学生解题过程中脑中的事实列表。
+
+对于一个学生求解一个给定的数学问题的过程，我会把所有关于这次解题的原始信息给你。这些信息包括：
+1. 题目本身
+2. 学生做题过程中的语音转文字记录，可能由于这个过程的不准确性导致错别字。
+3. 学生的笔迹记录
+4. 前一步已经分析好的原子操作列表
+解题的过程可以看作一个从现有信息出发，不断通过推理、计算、推测、分析等方式扩充已知信息，直到得到所求结果的过程。我们认为学生的每一步操作都属于下面几类中的一个：
+reasoning: 数学推导，基于确定的数学知识和已知条件进行严谨的、符合逻辑的推理。
+calculation: 数学计算，基于已知条件进行数值计算，包括计算数值、表达式、解方程等。
+[observation]: 从某些已知条件，通过观察、分析等方式得到新的信息。与推导和计算不同，这一过程往往是基于直觉或经验的不严谨的推理。
+intent: 产生求某一个值或证明某一结论的意图，计划接下来进行求解。
+verify: 检查当前正在求解的 intnet 是否已经被解决。每一个 intent 最终都应该有一个对应的 verify 操作，用于检查这个 intent 是否已经被解决。
+
+往往推导、计算和观察的操作都会产生一个新的已知条件，加入到学生的 memory 中，这个已知条件可以被用于后续的解题过程。你的任务是根据已有的信息，按时间顺序整理 memory 中的信息列表。注意，memory 中一般最开始就包含题目中的已知条件。
+
+$user$
+[题目]
+已知函数 $f(x)=a\left(\mathrm{e}^x+a\right)-x$.
+讨论 $f(x)$ 的单调性.
+
+[语音转文字]
+说话人 1 00:00
+OK，我们现在开始，首先知道 f(x) 的表达式是 a 乘 e 的 x 次方加 a 减 x。然后第一问需要讨论 f(x) 单调性，一般分析单调性需要求导，用导数正负来分析它的单调性，所以先用求导。得到了 f(x) 的导数。然后我们看到这个导数里面是含 a 的，所以需要分类讨论 a 的取值分为 a 等于0、a 大于0、a 小于 0 三种情况。挨个来看。a 等于 0 的话。f 的导数就是 0 - 1 小于0，导数小于0，原函数单调递减。
+
+说话人 1 01:22 
+第二种情况，a 小于0。
+
+说话人 1 01:30 
+同理，如果 a 小于 0 的话，那么 a 乘 e 的 x 次方是小于 0 的，因为 e 的 x 次方永远大于 0，所以 a 乘 e 的 x 次方是小于 0 的，所以 f 的导数一直小于0，跟上面一样原函数单调递减。第三种情况。
+
+说话人 1 02:27 
+通过简单画图可以知道，这种情况的时候导数是先负后正的。
+
+说话人 1 02:58 
+所以我们需要求出到底在哪里从负变正。不妨令导数等于 0。这样可以求得，也就是说 x 等于负的 ln(a)。现在我们知道 f 的导数在 x 等于负的 ln(a) 的左侧是负的，在这个右侧是正的。所以关于单调性就是在负无穷到负的 ln(a) 单调递减，从负的 ln(a) 到正无穷单调递增。
+
+说话人 1 04:11
+这样，原函数的单调性就讨论完了。
+
+[笔迹记录]
+\\[\nf(x)=a\\left(e^{x}+a\\right)-x\n\\]\n(1) \\( f^{\\prime}(x)=a e^{x}-1 \\)\n(1), \\( a=0 \\quad f^{\\prime}(x)=0-1<0 \\), 单减,\n(2), \\( a<0, a e^{x}<0, f^{\\prime}(x)<0 \\), 单减\n(3), \\( a>0, f^{\\prime}(x)=0 \\Rightarrow e^{x}=\\frac{1}{a}, x=-\\ln a \\) \\( (-\\infty,-\\ln a) \\) 单减， \\( (-\\ln a,+\\infty) \\) 单增\n
+
+[操作列表]
+{
+	action: [
+		{ "id": 1, "type": "intent", "content": "讨论 f(x) 的单调性" },
+        { "id": 2, "type": "intent", "content": "求 f(x) 导数" },
+        { "id": 3, "type": "calculation", "content": "f'(x) = ae^{x}-1" },
+        { "id": 4, "type": "verify", "content": "intent 2 解决" },
+        { "id": 5, "type": "intent", "content": "需要分类讨论$a$的取值" },
+        { "id": 6, "type": "intent", "content": "a=0时，讨论 f(x) 的单调性" },
+        { "id": 7, "type": "calculation", "content": "a=0时, f'(x)=-1 小于零" },
+        { "id": 8, "type": "reasoning", "content": "a=0时, 原函数单减" },
+        { "id": 9, "type": "verify", "content": "intent 6 解决" },
+        { "id": 10, "type": "intent", "content": "a<0时，讨论 f(x) 的单调性" },
+        { "id": 11, "type": "reasoning", "content": "a<0时, ae^{x} 小于零" },
+        { "id": 12, "type": "reasoning", "content": "a<0时, f'(x) 小于零" },
+        { "id": 13, "type": "reasoning", "content": "a<0时, 原函数单减" },
+        { "id": 14, "type": "verify", "content": "intent 10 解决" },
+        { "id": 15, "type": "intent", "content": "a>0时，讨论 f(x) 的单调性" },
+        { "id": 16, "type": "observation", "content": "a>0时，f'(x)先负后正" },
+        { "id": 17, "type": "intent", "content": "a>0时，解方程 f'(x)=0" },
+        { "id": 18, "type": "calculation", "content": "f'(x)=0 的解为 x = -ln a" },
+        { "id": 19, "type": "verify", "content": "intent 17 解决" },
+        { "id": 20, "type": "reasoning", "content": "a>0时，f'(x)在x=-ln(a)左侧为负，在右侧为正" },
+        { "id": 21, "type": "reasoning", "content": "a>0时，f(x)在(-infinity, -ln a)单减，在(-ln a, infinity)单增" }
+        { "id": 22, "type": "verify", "content": "intent 15 解决" },
+        { "id": 23, "type": "verify", "content": "intent 5 解决" },
+        { "id": 24, "type": "verify", "content": "intent 1 解决" },
+	]
+}
+
+$assistant$
+{
+	memory: [
+		{ "id": 1, "source": "given", "content": "f(x)=a(e^x+a)-x" },
+        { "id": 2, "source": "calculation", "content": "f'(x) = ae^{x}-1" },
+        { "id": 3, "source": "calculation", "content": "a=0时, f'(x)=-1 小于零" },
+        { "id": 4, "source": "reasoning", "content": "a=0时, 原函数单减" },
+        { "id": 5, "source": "reasoning", "content": "a<0时, ae^{x} 小于零" },
+        { "id": 6, "source": "reasoning", "content": "a<0时, f'(x) 小于零" },
+        { "id": 7, "source": "reasoning", "content": "a<0时, 原函数单减" },
+        { "id": 8, "source": "observation", "content": "a>0时，f'(x)先负后正" },
+        { "id": 9, "source": "calculation", "content": "f'(x)=0 的解为 x = -ln a" },
+        { "id": 10, "source": "reasoning", "content": "a>0时，f'(x)在x=-ln(a)左侧为负，在右侧为正" },
+        { "id": 11, "source": "reasoning", "content": "a>0时，f(x)在(-infinity, -ln a)单减，在(-ln a, infinity)单增" }
+	]
+}
+
+$user$
+[题目]
+%problem%
+
+[语音转文字]
+%audio_text%
+
+[笔迹记录]
+%stroke%
+
+[操作列表]
+%action_list%

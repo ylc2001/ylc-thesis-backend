@@ -68,7 +68,7 @@ chat_audio = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, audio_te
 chat_audio[1]["content"] += input_data["think_aloud"]
 print(json.dumps(chat_audio, indent=4, ensure_ascii=False))
 print(">>> FIX AUDIO TEXT <<<")
-fixed_audio_text = call_azure_api(chat_audio)
+# fixed_audio_text = call_azure_api(chat_audio)
 fixed_audio_text = call_glm_api(chat_audio)
 
 # file_path_1 = os.path.join(os.getcwd(), dir_name, step_1)

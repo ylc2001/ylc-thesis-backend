@@ -10,7 +10,7 @@ $system$
 [calculation]: 数学计算，基于已知条件进行数值计算，包括计算数值、表达式、解方程等。
 [observation]: 从某些已知条件，通过观察、分析等方式得到新的信息。与推导和计算不同，这一过程往往是基于直觉或经验的不严谨的推理。
 [intent]: 产生求某一个值或证明某一结论的意图，计划接下来进行求解。
-[verify]: 检查当前正在求解的 intnet 是否已经被解决。每一个 intent 最终都应该有一个对应的 verify 操作，用于检查这个 intent 是否已经被解决。
+verify: 检查当前正在求解的 intnet 是否已经被解决。每一个 intent 最终都应该有一个对应的 verify 操作，用于检查这个 intent 是否已经被解决。
 
 你的任务是整理学生解题过程中的每一步原子操作，对每一步操作按上述标准进行分类并记录其具体内容。
 
@@ -44,30 +44,30 @@ OK，我们现在开始，首先知道 f(x) 的表达式是 a 乘 e 的 x 次方
 $assistant$
 {
 	action: [
-		{ "id": 1, "type": "[intent]", "content": "讨论 f(x) 的单调性" },
-        { "id": 2, "type": "[intent]", "content": "求 f(x) 导数" },
-        { "id": 3, "type": "[calculation]", "content": "f'(x) = ae^{x}-1" },
-        { "id": 4, "type": "[verify]", "content": "intent 2 解决" },
-        { "id": 5, "type": "[intent]", "content": "需要分类讨论$a$的取值" },
-        { "id": 6, "type": "[intent]", "content": "a=0时，讨论 f(x) 的单调性" },
-        { "id": 7, "type": "[calculation]", "content": "a=0时, f'(x)=-1 小于零" },
-        { "id": 8, "type": "[reasoning]", "content": "a=0时, 原函数单减" },
-        { "id": 9, "type": "[verify]", "content": "intent 6 解决" },
-        { "id": 10, "type": "[intent]", "content": "a<0时，讨论 f(x) 的单调性" },
-        { "id": 11, "type": "[reasoning]", "content": "a<0时, ae^{x} 小于零" },
-        { "id": 12, "type": "[reasoning]", "content": "a<0时, f'(x) 小于零" },
-        { "id": 13, "type": "[reasoning]", "content": "a<0时, 原函数单减" },
-        { "id": 14, "type": "[verify]", "content": "intent 10 解决" },
-        { "id": 15, "type": "[intent]", "content": "a>0时，讨论 f(x) 的单调性" },
-        { "id": 16, "type": "[observation]", "content": "a>0时，f'(x)先负后正" },
-        { "id": 17, "type": "[intent]", "content": "a>0时，解方程 f'(x)=0" },
-        { "id": 18, "type": "[calculation]", "content": "f'(x)=0 的解为 x = -ln a" },
-        { "id": 19, "type": "[verify]", "content": "intent 17 解决" },
-        { "id": 20, "type": "[reasoning]", "content": "a>0时，f'(x)在x=-ln(a)左侧为负，在右侧为正" },
-        { "id": 21, "type": "[reasoning]", "content": "a>0时，f(x)在(-infinity, -ln a)单减，在(-ln a, infinity)单增" }
-        { "id": 22, "type": "[verify]", "content": "intent 15 解决" },
-        { "id": 23, "type": "[verify]", "content": "intent 5 解决" },
-        { "id": 24, "type": "[verify]", "content": "intent 1 解决" },
+		{ "id": 1, "type": "intent", "content": "讨论 f(x) 的单调性" },
+        { "id": 2, "type": "intent", "content": "求 f(x) 导数" },
+        { "id": 3, "type": "calculation", "content": "f'(x) = ae^{x}-1" },
+        { "id": 4, "type": "verify", "content": "intent 2 解决" },
+        { "id": 5, "type": "intent", "content": "需要分类讨论$a$的取值" },
+        { "id": 6, "type": "intent", "content": "a=0时，讨论 f(x) 的单调性" },
+        { "id": 7, "type": "calculation", "content": "a=0时, f'(x)=-1 小于零" },
+        { "id": 8, "type": "reasoning", "content": "a=0时, 原函数单减" },
+        { "id": 9, "type": "verify", "content": "intent 6 解决" },
+        { "id": 10, "type": "intent", "content": "a<0时，讨论 f(x) 的单调性" },
+        { "id": 11, "type": "reasoning", "content": "a<0时, ae^{x} 小于零" },
+        { "id": 12, "type": "reasoning", "content": "a<0时, f'(x) 小于零" },
+        { "id": 13, "type": "reasoning", "content": "a<0时, 原函数单减" },
+        { "id": 14, "type": "verify", "content": "intent 10 解决" },
+        { "id": 15, "type": "intent", "content": "a>0时，讨论 f(x) 的单调性" },
+        { "id": 16, "type": "observation", "content": "a>0时，f'(x)先负后正" },
+        { "id": 17, "type": "intent", "content": "a>0时，解方程 f'(x)=0" },
+        { "id": 18, "type": "calculation", "content": "f'(x)=0 的解为 x = -ln a" },
+        { "id": 19, "type": "verify", "content": "intent 17 解决" },
+        { "id": 20, "type": "reasoning", "content": "a>0时，f'(x)在x=-ln(a)左侧为负，在右侧为正" },
+        { "id": 21, "type": "reasoning", "content": "a>0时，f(x)在(-infinity, -ln a)单减，在(-ln a, infinity)单增" }
+        { "id": 22, "type": "verify", "content": "intent 15 解决" },
+        { "id": 23, "type": "verify", "content": "intent 5 解决" },
+        { "id": 24, "type": "verify", "content": "intent 1 解决" },
 	]
 }
 
