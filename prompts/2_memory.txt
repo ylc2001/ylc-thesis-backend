@@ -97,7 +97,7 @@ $user$
 %audio_text%
 
 [笔迹记录]
-%stroke%
+%written_text%
 
 [操作列表]
 %action_list%

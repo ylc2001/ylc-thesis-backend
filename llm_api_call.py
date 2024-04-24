@@ -10,16 +10,23 @@ from zhipuai import ZhipuAI
 # 万一最后格式有问题没有输出到json文件，去终端拷贝输出手动搞
 # 每一步耗时在 30s 左右，总流程一分半，别急
 
+input_folder = "input_data_yaml"
+input_filename = "0424_cwh_correct.yaml"
+input_path = os.path.join(os.getcwd(), input_folder, input_filename)
+
 with open('config.yaml', 'r') as file:
 	config = yaml.safe_load(file)
-with open('__input.yaml', 'r') as file:
+with open(input_path, 'r') as file:
 	input_data = yaml.safe_load(file)
+
+# input_data: problem, think_aloud, written_text; audio_text
+
 # promt 文件存在 ./dir_name/step_x.txt
-audio_text_promt = "audio_text.txt"
-step_1 = "step-1-v3.txt"
-step_2 = "step-2-v2.txt"
-step_3 = "step-3-v3.txt"
 dir_name = "prompts"
+audio_text_promt = "audio_text.txt"
+step_1 = "1_action_list.txt"
+step_2 = "2_memory.txt"
+step_3 = "3_standardize.txt"
 
 def call_azure_api(chat):
 	'''
@@ -61,18 +68,33 @@ def call_glm_api(chat):
 		print(chunk.choices[0].delta.content, end='')
 	print("\n----------------------------------------")
 	return result
-        
+
 
 converter = PromptConverter()
-chat_audio = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, audio_text_promt))
-chat_audio[1]["content"] += input_data["think_aloud"]
-print(json.dumps(chat_audio, indent=4, ensure_ascii=False))
-print(">>> FIX AUDIO TEXT <<<")
-# fixed_audio_text = call_azure_api(chat_audio)
-fixed_audio_text = call_glm_api(chat_audio)
 
-# file_path_1 = os.path.join(os.getcwd(), dir_name, step_1)
-# chat_1 = converter.rawfile2chat(file_path_1)
+if "audio_text" in input_data:
+	print(">>> Using existing fixed audio_text <<<")
+else:
+	chat_audio = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, audio_text_promt))
+	chat_audio[-1]["content"] = chat_audio[-1]["content"].replace("%think_aloud%", input_data["think_aloud"])
+	print(">>> FIX AUDIO TEXT <<<")
+	input_data["audio_text"] = call_azure_api(chat_audio)
+	# input_data["audio_text"] = call_glm_api(chat_audio)
+
+	# write into yaml file
+	with open(input_path, 'w') as file:
+		yaml.dump(input_data, file, default_flow_style=False, allow_unicode=True)
+		print(f">>> audio_text saved to yaml file.")
+
+file_path_1 = os.path.join(os.getcwd(), dir_name, step_1)
+chat_1 = converter.rawfile2chat(file_path_1)
+chat_1[-1]["content"] = chat_1[-1]["content"].replace("%problem%", input_data["problem"])
+chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
+print(">>> Step 1 action_list <<<")
+# step_1_result = call_glm_api(chat_1)
+step_1_result = call_azure_api(chat_1)
+
 
 # # print(json.dumps(chat, indent=4, ensure_ascii=False))
 # print(">>> ROUND 1 <<<")

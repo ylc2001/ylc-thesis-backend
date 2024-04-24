@@ -79,4 +79,4 @@ $user$
 %audio_text%
 
 [笔迹记录]
-%stroke%
+%written_text%

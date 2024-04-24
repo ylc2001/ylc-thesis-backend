@@ -5,3 +5,5 @@ $system$
 
 $user$
 请根据你的数学知识和语境理解，修复以下文本：
+
+%think_aloud%
