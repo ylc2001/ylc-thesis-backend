@@ -26,7 +26,8 @@ dir_name = "prompts"
 audio_text_promt = "audio_text.txt"
 step_1 = "1_action_list.txt"
 step_2 = "2_memory.txt"
-step_3 = "3_standardize.txt"
+step_3 = "3_computation_graph.txt"
+step_6 = "6_standardize.txt"
 
 def call_azure_api(chat):
 	'''
@@ -73,7 +74,7 @@ def call_glm_api(chat):
 converter = PromptConverter()
 
 if "audio_text" in input_data:
-	print(">>> Using existing fixed audio_text <<<")
+	print(">>> Using existing [fixed audio_text] <<<")
 else:
 	chat_audio = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, audio_text_promt))
 	chat_audio[-1]["content"] = chat_audio[-1]["content"].replace("%think_aloud%", input_data["think_aloud"])
@@ -81,19 +82,81 @@ else:
 	input_data["audio_text"] = call_azure_api(chat_audio)
 	# input_data["audio_text"] = call_glm_api(chat_audio)
 
-	# write into yaml file
-	with open(input_path, 'w') as file:
-		yaml.dump(input_data, file, default_flow_style=False, allow_unicode=True)
-		print(f">>> audio_text saved to yaml file.")
+if "action_list" in input_data:
+	print(">>> Using existing [action list] <<<")
+else:
+	chat_1 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_1))
+	chat_1[-1]["content"] = chat_1[-1]["content"].replace("%problem%", input_data["problem"])
+	chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+	chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
+	print(">>> Step 1 action_list <<<")
+	# input_data["action_list"] = call_glm_api(chat_1)
+	input_data["action_list"] = call_azure_api(chat_1)
 
-file_path_1 = os.path.join(os.getcwd(), dir_name, step_1)
-chat_1 = converter.rawfile2chat(file_path_1)
-chat_1[-1]["content"] = chat_1[-1]["content"].replace("%problem%", input_data["problem"])
-chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data["audio_text"])
-chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
-print(">>> Step 1 action_list <<<")
-# step_1_result = call_glm_api(chat_1)
-step_1_result = call_azure_api(chat_1)
+if "memory" in input_data:
+	print(">>> Using existing [memory] <<<")
+else:
+	chat_2 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_2))
+	chat_2[-1]["content"] = chat_2[-1]["content"].replace("%problem%", input_data["problem"])
+	chat_2[-1]["content"] = chat_2[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+	chat_2[-1]["content"] = chat_2[-1]["content"].replace("%written_text%", input_data["written_text"])
+	chat_2[-1]["content"] = chat_2[-1]["content"].replace("%action_list%", input_data["action_list"])
+	print(">>> Step 2 memory <<<")
+	# input_data["memory"] = call_glm_api(chat_1)
+	input_data["memory"] = call_azure_api(chat_2)
+
+if "student_graph" in input_data:
+	print(">>> Using existing [student_graph] <<<")
+else:
+	chat_3 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_3))
+	chat_3[-1]["content"] = chat_3[-1]["content"].replace("%problem%", input_data["problem"])
+	chat_3[-1]["content"] = chat_3[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+	chat_3[-1]["content"] = chat_3[-1]["content"].replace("%written_text%", input_data["written_text"])
+	chat_3[-1]["content"] = chat_3[-1]["content"].replace("%memory%", input_data["memory"])
+	print(">>> Step 3 student_graph <<<")
+	# input_data["memory"] = call_glm_api(chat_1)
+	input_data["student_graph"] = call_azure_api(chat_3)
+
+output_json_path = os.path.join(os.getcwd(), "results", input_filename+"_graph.json")
+with open(output_json_path, 'w') as file:
+	try:
+		json.dump(json.loads(input_data["student_graph"]), file, indent=4, ensure_ascii=False)
+		print(f">>> Graph results saved to json file.")
+	except Exception as e:
+		print("!! Graph result is not a json string.")
+		print(e)
+
+
+# if "student_graph_std" in input_data:
+# 	print(">>> Using existing [student_graph_std] <<<")
+# else:
+standard_graph = json.load(open(os.path.join(os.getcwd(), "results", "standard_graph.json"), 'r'))
+standard_graph_str = json.dumps(standard_graph, indent=4, ensure_ascii=False)
+chat_6 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_6))
+chat_6[-1]["content"] = chat_6[-1]["content"].replace("%student_graph%", input_data["student_graph"])
+chat_6[-1]["content"] = chat_6[-1]["content"].replace("%standard_graph%", standard_graph_str)
+print(">>> Step 6 student_graph_std <<<")
+print(chat_6)
+# input_data["memory"] = call_glm_api(chat_1)
+input_data["student_graph_std"] = call_azure_api(chat_6)
+
+output_json_path = os.path.join(os.getcwd(), "results", input_filename+"_graph_std.json")
+with open(output_json_path, 'w') as file:
+	try:
+		json.dump(json.loads(input_data["student_graph_std"]), file, indent=4, ensure_ascii=False)
+		print(f">>> Graph results saved to json file.")
+	except Exception as e:
+		print("!! Graph result is not a json string.")
+		print(e)
+
+
+
+
+
+# write into yaml file
+with open(input_path, 'w') as file:
+	yaml.dump(input_data, file, default_flow_style=False, allow_unicode=True)
+	print(f">>> results saved to yaml file.")
 
 
 # # print(json.dumps(chat, indent=4, ensure_ascii=False))
