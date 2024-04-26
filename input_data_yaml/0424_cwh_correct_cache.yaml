@@ -1,0 +1,211 @@
+audio_text: '我来做一下这道题，直线与椭圆的位置关系一共有两问，已知抛物线 \( C \) 等于 \( y^2 \) 是 \( y^2 = 4px \)（\(
+  p > 0 \)，焦点为 \( (p, 0) \)）。先回忆一下高中知识，\( y^2 = 4px \) 应该是一个横着的抛物线。
+
+
+  焦点是多少来着？焦点在 \( (p, 0) \) 上。椭圆的焦点是啥来着？我怎么都忘了。\( PO \) 等于 \( PF \) 肯定不在左边。\( PO =
+  PF \)，那应该在这里了。
+
+
+  那应该这个 \( F \) 是 \( PF \) 是个等腰三角形，在左边，因为如果在左边的话肯定 \( PF \) 比 \( PO \) 小，所以焦点 \( F
+  \) 得在右边。然后是求抛物线的标准方程，那就是要把 \( p \) 给求出来。那 \( p \) 就等于 \( \frac{r}{2} \)，所以第一问这个标准方程，标准方程是啥意思？
+
+
+  \( PO \) 等于 \( PF \)，焦点肯定在 \( x \) 轴上，那 \( FP \) 等于 \( PF \)，必须得在这，那 \( F \) 的坐标必须得是
+  \( 2p \)。然后焦点的公式我想想，焦点的定义是啥来着，突然忘记了。推一下，先猜一个吧，焦点好像是 \( \frac{2}{p} \)，应该还是 \( p
+  \)，还是想推一下吧。嗯，焦点的定义是啥来着？我就记得光线经过椭圆反射一定会到焦点。先求一下导数。
+
+
+  对，应该是 \( y = \sqrt{4px} \)。在 \( y \geq 0 \) 的时候，那 \( y \) 求导应该是 \( \frac{1}{2\sqrt{px}}
+  \)。导数就等于。
+
+
+  \( \frac{1}{2\sqrt{px}} \) 的导数。再乘以 \( 4p \) 倍的 \( \sqrt{2px} \)。你在 \( x_0 \) 的导数应该是
+  \( p \)，它应该是 \( \frac{1}{\sqrt{2px}} \) 乘以 \( 2p \)。这个导数在。我想一想导数在 \( x_0 \) 的斜率应该是这个，感觉都忘光了。
+
+
+  来算了。我求一个合适的吧。
+
+
+  想一下。
+
+
+  椭圆的焦点的定义是？\( PF_1 + PF_2 \) 应该是一个常数。
+
+
+  然后双曲线是 \( PF_1 - PF_2 \) 是一个常数。
+
+
+  那图。
+
+
+  抛物线应该是 \( F_2 \) 在无穷远。嗯，好像不能这么推，得按定义来推。嗯，这两个角应该是相等的，这个的斜率应该是当成直角看，45 度 \( \theta
+  \)。如果 \( p = 0 \) 的话，那他的斜率那就是 \( 1 \)。嗯，所以你刚好等一的时候 \( p \) 等于可以当 \( 1 \)，\( p \)
+  点 \( (p, 0) \) 而 \( F \) 点 \( (p, 0) \)。那焦点的公式确实是 \( \frac{1}{2} p \)，所以 \( 2p \)
+  等于 \( \frac{1}{2} p \) 的 \( \tan \theta \)。所以标准方程应该是 \( y^2 = 8px \)。第一问做完了，这应该是第一个。
+
+  '
+checked_std_graph: '{"nodes": [{"id": 1, "type": "AND", "content": "\n", "dependency":
+  [], "correctness": "correct"}, {"id": 2, "type": "AND", "content": "F(1/2, 0)",
+  "dependency": [1], "correctness": "incorrect"}, {"id": 3, "type": "AND", "content":
+  "P \n", "dependency": [1], "correctness": "correct"}, {"id": 4, "type": "AND", "content":
+  "P(p/4, \\sqrt{2})", "dependency": [2, 3], "correctness": "incorrect"}, {"id": 5,
+  "type": "AND", "content": "2 = 2p*(p/4)", "dependency": [4], "correctness": "incorrect"},
+  {"id": 6, "type": "AND", "content": "p = 2", "dependency": [5], "correctness": "correct"},
+  {"id": 7, "type": "AND", "content": " \n", "dependency": [6], "correctness": "correct"},
+  {"id": 8, "type": "AND", "content": "A(x1, y1)", "dependency": [1], "correctness":
+  "unknown"}, {"id": 9, "type": "AND", "content": "B(x2, y2)", "dependency": [1],
+  "correctness": "unknown"}, {"id": 10, "type": "AND", "content": "\n", "dependency":
+  [1], "correctness": "incorrect"}, {"id": 11, "type": "AND", "content": "k^2x^2 -
+  (2ak^2+4)x + k^2a^2 = 0", "dependency": [10], "correctness": "incorrect"}, {"id":
+  12, "type": "AND", "content": "Delta = 16ak^2+16 > 0", "dependency": [11], "correctness":
+  "unknown"}, {"id": 13, "type": "AND", "content": "ak^2+1 > 0", "dependency": [12],
+  "correctness": "unknown"}, {"id": 14, "type": "AND", "content": "x1+x2 = 2a + 4/k^2",
+  "dependency": [11], "correctness": "unknown"}, {"id": 15, "type": "AND", "content":
+  "x1*x2 = a^2", "dependency": [11], "correctness": "unknown"}, {"id": 16, "type":
+  "AND", "content": "|AF| = x1+1", "dependency": [2, 8], "correctness": "unknown"},
+  {"id": 17, "type": "AND", "content": "|BF| = x2+1", "dependency": [2, 9], "correctness":
+  "unknown"}, {"id": 18, "type": "AND", "content": "1/|AF| + 1/|BF| = $\frac{2 a+2+\frac{4}{k^2}}{2
+  a+a^2+1+\frac{4/k^2}}$", "dependency": [14, 15, 16, 17], "correctness": "unknown"},
+  {"id": 19, "type": "AND", "content": "\n", "dependency": [1], "correctness": "unknown"},
+  {"id": 20, "type": "AND", "content": "y^2-4my-4a = 0", "dependency": [19], "correctness":
+  "unknown"}, {"id": 21, "type": "AND", "content": "Delta = 16m^2+16a > 0", "dependency":
+  [20], "correctness": "unknown"}, {"id": 22, "type": "AND", "content": "m^2+a > 0",
+  "dependency": [21], "correctness": "unknown"}, {"id": 23, "type": "AND", "content":
+  "y1+y2 = 4m", "dependency": [20], "correctness": "unknown"}, {"id": 24, "type":
+  "AND", "content": "y1*y2 = -4a", "dependency": [20], "correctness": "unknown"},
+  {"id": 25, "type": "AND", "content": "|AF| = x1+1 = my1+a+1", "dependency": [2,
+  8, 19], "correctness": "unknown"}, {"id": 26, "type": "AND", "content": "|BF| =
+  x2+1 = my2+a+1", "dependency": [2, 9, 19], "correctness": "unknown"}, {"id": 27,
+  "type": "AND", "content": "1/|AF| + 1/|BF| = $\frac{4m^2 + 2a +2}{4m^2 + (a+1)^2}$",
+  "dependency": [23, 24, 25, 26], "correctness": "unknown"}, {"id": 28, "type": "OR",
+  "content": "2a+2 = 2a+a^2+1", "dependency": [18, 27], "correctness": "unknown"},
+  {"id": 29, "type": "AND", "content": "a = 1 or a = -1", "dependency": [28], "correctness":
+  "unknown"}, {"id": 31, "type": "AND", "content": "a = -1", "dependency": [29, 1],
+  "correctness": "correct"}, {"id": 1001, "type": "AND", "content": " \n", "dependency":
+  [7, 31], "correctness": "correct"}]}'
+problem: '已知抛物线 $C: y^2=2 p x(p>0)$ 的焦点为 $F$, 点 $P\left(x_0, \sqrt{2}\right)$ 在 $C$
+  上, 且 $|P O|=|P F|$( O 为坐标原点).
+
+  (1) 求抛物线 $C$ 的标准方程;
+
+  (2) 过点 $(a, 0)(a<0)$ 的直线与抛物线 $C$ 交于 $A, B$ 两点, 若 $\frac{1}{|A F|}+\frac{1}{|B F|}$
+  为定值, 求实数 $a$的值.
+
+  '
+think_aloud: "2024年4月24日 下午 7:14|10分钟 57秒\n\n关键词:\n切线、直线、斜率、定值、根号、抛物线、无穷大、常数、等分线、绝对值、椭圆、直线方程\n\
+  \n文字记录:\n说话人 1 00:01 \n好，下面让我重新做一下这道题。这个看一下，这是直线与椭圆的位置关系。 y 方等于 2 p x p 大于0，先发个图。\n\
+  \n说话人 1 00:26 \n那么焦点应该是二分之 p 0，然后有一个点 PO 等于PF，那它肯定在这个等分线上，那 p 可能在这 p 的位置是S0，根号2。那我们现在继续取我们这个\
+  \ 2 PX 0 等于2， PX 0 等于一，这是第一个已知条件。然后我们再想一下，这个地方肯定是 x 吨，它因为是等方线，所以 2 分之 p 一定等于两倍的X0，所以\
+  \ p 等于 4 倍的x。对，那我们应该连立一下，能求出来 4S 0 平方等于 1 X0 平方等于 1/ 4， X08 等于 1/ 2，因为 X0 是应该是大于\
+  \ 0 的吧。对，大于0，因为 p 是大于0，所以 x n 肯定大于。那这样的话 p 应该是等于2。\n\n说话人 1 01:30 \n对，两个，这两个我都知道了，我们现在来看一下第一问\
+  \ seed 标准方程，那直接写出来了， y 方等于 4X 那个第一个求完了。第二问的话过 a 点抛物线与它交移，我们再画一个抛物线， a f BF。嗯，看一下，先连一下，我把图画出来，\
+  \ a f b f 这边是A0，这个直线好，得到 a f 一加 b F1 为定值，求 a 的值。定值的意思就是说这个直线我不管怎么选，这个斜率怎么变，它都是个定值。那我考虑。先来看一下\
+  \ y 方等于4X，然后直线方程应该是 y 等于 k 倍的 x 减 a 对a， x 等于说是 0 对，那可以验算一下那 k 方 x 减 a 的平方等于4X，那就是\
+  \ a b 这两点要满足这个关系，看到吗？ a f 加 b f。\n\n说话人 1 03:38 \n这个 k 也不是随意取的。因为它如果刚好等于切线的话，就应该是只有一个焦点，那这个时候应该只有一个解。所以说这个方程应该是可以用\
+  \ x 减 2 方减 IX 加 a 方。我们求一下4X，那就是 k 方 x 方减 2 AK 方加4X。大家可以说 21 款章节，对登上去加 4S are you\
+  \ taking us？现场推广。那 Delta 等于 b 方减去4，退了 40 块， a 方 i 等于0，我们求一下切线。那就是 2A k 方加 4 应该等于它的平方，求\
+  \ 2K 方 AA 应该是小一点的，他的绝对值 9H 888 八八。那首先一要么就是 2 A k 方加 4 = 2 a k 方去肯定不对。肯定就是 2 AK 帮你加\
+  \ 4 等于负了。那就是 4 倍的 a k 方 2A2A4A k 8 + 4 = 6 ak 方一点等于-1。\n\n说话人 1 05:51 \n这一方等于负的\
+  \ a 分之一。这是切线的情况下，应该是这样。那切线的情况下。那 k 肯定等于做 agenda 取根号。那这个时候的直线方程应该是挂了一个等于情况下负 a 分之一减\
+  \ a 糗，切，这样干嘛呢？然后是 AF 加BF。想想看。\n\n说话人 1 06:54 \n应该是先，嗯，我们再看一下 AF 和BF。何总的计算。\n\n说话人\
+  \ 1 07:16 \n如果做对称线，第一屏。\n\n说话人 1 07:41 \n首先 f 的这个位置是10。\n\n说话人 1 08:04 \n不对，我可以把这个直线往下拉的话，\
+  \ a 就是到原点， b 就到无穷大。那 a f 此时就是一，那就是 1/ 1，加上无穷大 1/ 2 应该就等于一，所以常数就是一。 a i 分之一加 GF 之一，它始终就等于一。\n\
+  \n说话人 1 08:52 \n那再带一个数，如果令看一下 x 等于一的话，如果令 x 等于 19 半，应该是正一二。我们找一个 f 的正常方，这个点应该是一二，那此时这个我们就练这个点位，嗯，\
+  \ t 吧？那 TF 长度就应该是二 1/ 2，加多少分之一？那等于这个常数一呢？那这个多少应该是2。所以说我猜到了这个 t 这个位置实际上是切线。对对对。那那就好了，那就是从\
+  \ a 0 到一二刚好是切线，那这个 k 它的斜率应该是 2/ 1 减a，刚刚我们求的这个斜率应该是负 a 分之一，那平方一下一减 a 的平方分之4，这种负 a\
+  \ 分之一。那就是一减 a 的平方等于负4A， a 方减 2A 加一等于-4， a 减一方加 2A 加 1 = 0， a 加一的平衡等于两，所以 a 等于-1。好求出来。\n"
+written_text: '$$
+
+  \begin{aligned}
+
+  & 2 p x_0=2 \\
+
+  & p x_0=1 \\
+
+  & \frac{p}{2}=2 x_0 \\
+
+  & p=4 x_0 \\
+
+  & 4 x_0^2=1 \\
+
+  & x_0^2=\frac{1}{4}
+
+  \end{aligned}
+
+  $$
+
+  $$
+
+  \begin{aligned}
+
+  & x_0=\frac{1}{2} \\
+
+  & p=2
+
+  \end{aligned}
+
+  $$
+
+  (1) $y^2=4 x$
+
+  $A, B: \quad k^2(x-a)^2=4 x$
+
+
+  $$
+
+  \begin{gathered}
+
+  k^2\left(x^2-2 a x+a^2\right)=4 x \\
+
+  k^2 x^2-\left(2 a k^2+4\right) x+k^2 a^2=0 \\
+
+  \Delta=\left(2 a k^2+4\right)^2-4 k^4 a^2=0 \\
+
+  \left|2 a k^2+4\right|=\left|2 k^2 a\right| \\
+
+  2 a k^2+4=2 a k^2 x \\
+
+  2 a k^2+4=-2 a k^2 \\
+
+  4 a k^2+4=0 \\
+
+  a k^2=-1 \\
+
+  \frac{k^2=-\frac{1}{a}}{k=\sqrt{-\frac{1}{a}}} \\
+
+  y=\sqrt{-\frac{1}{a}} \cdot(x-a) \\
+
+  \frac{1}{1}+\frac{1}{\infty}=1=\frac{1}{\mid A F}+\frac{1}{(B F)} \\
+
+  \hat{\xi} x=1, y=2, \quad \text { TF } \mid=2 \\
+
+  \frac{1}{2}+\frac{1}{?}=1, ?=2
+
+  \end{gathered}
+
+  $$
+
+
+  $$
+
+  \begin{aligned}
+
+  & (a, 0) \rightarrow(1,2) \\
+
+  & \frac{2}{1-a}=\sqrt{-\frac{1}{a}} \\
+
+  & \frac{4}{(1-a)^2}=-\frac{1}{a} \\
+
+  & (1-a)^2=-4 a \\
+
+  & a^2-2 a+1=-4 a \\
+
+  & a^2+2 a+1=0 \\
+
+  & (a+1)^2=0 \\
+
+  & a=-1 .
+
+  \end{aligned}
+
+  $$'
