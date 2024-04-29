@@ -6,6 +6,7 @@ import yaml
 from zhipuai import ZhipuAI
 import textwrap
 import time
+import copy
 
 
 # 说明：如果测试新的题目数据，输入要放到step_1最下面，$user$里面
@@ -14,7 +15,7 @@ import time
 # 每一步耗时在 30s 左右，总流程一分半，别急
 
 input_folder = "input_data_yaml"
-input_filename = "0424_cwh_correct"
+input_filename = "0427_ylc_correct"
 thinkaloud_chunk = False 	        # 原始的语音转文字文本是否分段处理
 llm_api_name = "gpt"                # "gpt" or "glm"
 use_existing_data_yaml = True      # 是否使用 yaml 文件中已有的中间结果
@@ -28,9 +29,9 @@ with open('config.yaml', 'r') as file:
 with open(input_path, 'r') as file:
 	input_data = yaml.safe_load(file)
 # if cache_path exists, load it
-if os.path.exists(cache_path) and use_existing_data_yaml:
-	with open(cache_path, 'r') as file:
-		input_data = yaml.safe_load(file)
+# if os.path.exists(cache_path) and use_existing_data_yaml:
+# 	with open(cache_path, 'r') as file:
+# 		input_data = yaml.safe_load(file)
 with open(std_graph_path, 'r') as json_file:
     standard_graph = json.dumps(json.load(json_file))
 
@@ -40,7 +41,7 @@ with open(std_graph_path, 'r') as json_file:
 dir_name = "prompts"
 audio_text_promt = "audio_text.txt"
 step_1 = "1_check_correctness.txt"
-step_2 = "2_memory.txt"
+step_2 = "2_analyze_mistakes.txt"
 step_3 = "3_computation_graph.txt"
 step_6 = "6_standardize.txt"
 
@@ -119,16 +120,17 @@ else:
  
 
 # Step 1, check_correctness 检查标准计算图中每一步的正确性
-# if "checked_std_graph" in input_data and use_existing_data_yaml:
-# 	print(">>> Using existing [check_correctness] <<<")
-# else:
 chat_1 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_1))
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%problem%", input_data["problem"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data["audio_text"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%standard_graph%", standard_graph)
-print(">>> Step 1 check_correctness <<<")
-input_data["checked_std_graph"] = call_llm_api(chat_1, llm_api_name, True)
+if "checked_std_graph" in input_data and use_existing_data_yaml:
+	print(">>> Using existing [check_correctness] <<<")
+else:
+	print(">>> Step 1 check_correctness <<<")
+	input_data["checked_std_graph"] = call_llm_api(chat_1, llm_api_name, True)
+chat_1.append({"role": "assistant", "content": input_data["checked_std_graph"]})
 
 # 保存标注后的计算图到 json
 output_json_path = os.path.join(os.getcwd(), "results", input_filename+"_checked_std.json")
@@ -142,9 +144,21 @@ with open(output_json_path, 'w') as file:
 		print("!! 标注后的计算图 is not a json string.")
 		print(e)
 
+chat_2 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_2))
+chat_2[-1]["content"] = chat_2[-1]["content"].replace("%problem%", input_data["problem"])
+chat_2[-1]["content"] = chat_2[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+chat_2[-1]["content"] = chat_2[-1]["content"].replace("%written_text%", input_data["written_text"])
+chat_2[-1]["content"] = chat_2[-1]["content"].replace("%checked_std_graph%", input_data["checked_std_graph"])
 
 
-
+checked_std_graph = json.loads(input_data["checked_std_graph"])
+for item in checked_std_graph['nodes']:
+	if item.get('correctness') == 'incorrect':
+		chat_2_copy = copy.deepcopy(chat_2)
+		print(f">>> 节点 {item['id']} 错因分析 <<<")
+		print("---------------------------------------")
+		chat_2_copy[-1]["content"] = chat_2_copy[-1]["content"].replace("%node_info%", f"{item['id']}: {item['content']}")
+		call_llm_api(chat_2_copy, llm_api_name)
 
 
 # write into yaml file

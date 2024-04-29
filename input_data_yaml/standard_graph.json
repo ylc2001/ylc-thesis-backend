@@ -1,7 +1,10 @@
 {
     "nodes": [
         { "id": 1, "type": "AND", "content": "题给条件", "dependency": [] },
-        { "id": 2, "type": "AND", "content": "F(1/2, 0)", "dependency": [1] },
+
+
+        
+        { "id": 2, "type": "AND", "content": "F(p/2, 0)", "dependency": [1] },
         { "id": 3, "type": "AND", "content": "P 在 OF 中垂线上", "dependency": [1] },
         { "id": 4, "type": "AND", "content": "P(p/4, \\sqrt{2})", "dependency": [2, 3] },
         { "id": 5, "type": "AND", "content": "2 = 2p*(p/4)", "dependency": [4] },

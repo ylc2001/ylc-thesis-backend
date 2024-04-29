@@ -4,7 +4,7 @@ from pyvis.network import Network
 
 # 说明：设置好输入 json 文件和输出的 html 文件名称
 
-file_name = "0424_cwh_correct_checked_std.json"
+file_name = "0427_ylc_correct_checked_std.json"
 # file_name = "standard_graph.json"
 file_path = os.path.join(os.getcwd(), "results", file_name)
 output_name = "计算图.html"
