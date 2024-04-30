@@ -178,3 +178,4 @@ server_logs
 # tmp files
 tmp*
 temp*
+config.yaml

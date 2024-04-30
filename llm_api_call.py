@@ -16,11 +16,11 @@ import copy
 
 input_folder = "input_data_yaml"
 input_filename = "0427_ylc_correct"
-thinkaloud_chunk = False 	        # 原始的语音转文字文本是否分段处理
-llm_api_name = "gpt"                # "gpt" or "glm"
-use_existing_data_yaml = True      # 是否使用 yaml 文件中已有的中间结果
+thinkaloud_chunk = False 	         # 原始的语音转文字文本是否分段处理
+llm_api_name = "azure"               # "azure", "openai", "glm"
+use_existing_data_yaml = True        # 是否使用 yaml 文件中已有的中间结果
 
-std_graph_path = os.path.join(os.getcwd(), input_folder, "standard_graph.json")
+std_graph_path = os.path.join(os.getcwd(), input_folder, "standard_graph_new.json")
 input_path = os.path.join(os.getcwd(), input_folder, input_filename+".yaml")
 cache_path = os.path.join(os.getcwd(), input_folder, input_filename+"_cache.yaml")
 
@@ -33,17 +33,19 @@ with open(input_path, 'r') as file:
 # 	with open(cache_path, 'r') as file:
 # 		input_data = yaml.safe_load(file)
 with open(std_graph_path, 'r') as json_file:
-    standard_graph = json.dumps(json.load(json_file))
+	standard_graph_json = json.load(json_file)
+	standard_graph = json.dumps(standard_graph_json, ensure_ascii=False)
 
 # input_data: problem, think_aloud, written_text; audio_text
 
 # promt 文件存在 ./dir_name/step_x.txt
 dir_name = "prompts"
 audio_text_promt = "audio_text.txt"
-step_1 = "1_check_correctness.txt"
-step_2 = "2_analyze_mistakes.txt"
-step_3 = "3_computation_graph.txt"
-step_6 = "6_standardize.txt"
+step_1 = "check_node_correctness.hprompt"
+# step_1 = "1_check_correctness.txt"
+# step_2 = "2_analyze_mistakes.txt"
+# step_3 = "3_computation_graph.txt"
+# step_6 = "6_standardize.txt"
 
 def call_llm_api(chat: list, api_name: str, json_format=False):
 	'''
@@ -51,9 +53,10 @@ def call_llm_api(chat: list, api_name: str, json_format=False):
 
 	return: str, response from Azure API
 	'''
+
 	while True:
 		try:
-			if api_name == "gpt":
+			if api_name == "azure":
 				with OpenAIClient(
 					api_key=config["azure_api_key"], 
 					api_base='https://pcg-west-us.openai.azure.com/', 
@@ -69,6 +72,25 @@ def call_llm_api(chat: list, api_name: str, json_format=False):
 					).call()  ## note .call() here
 					result = ""
 					print("---------- Azure API response ----------")
+					for text in stream_chat(response):
+						result += text
+						print(text, end='')
+					print("\n----------------------------------------")
+					return result
+			elif api_name == "openai":
+				with OpenAIClient(
+					api_key=config["openai_api_key"],  
+					organization=config["openai_organization"],
+					) as client:
+					response = client.chat(
+						model="gpt-4-1106-preview",  # 注意模型名字是azure里定义的名字，不一定是这个
+						messages=chat,
+						stream=True,
+						response_format={ "type": "json_object" if json_format else "text"},
+						temperature=0.2,
+					).call()  ## note .call() here
+					result = ""
+					print("---------- OpenAI API response ----------")
 					for text in stream_chat(response):
 						result += text
 						print(text, end='')
@@ -117,51 +139,74 @@ else:
 		chat_audio[-1]["content"] = chat_audio[-1]["content"].replace("%think_aloud%", input_data["think_aloud"])
 		print(">>> FIX AUDIO TEXT <<<")
 		input_data["audio_text"] = call_llm_api(chat_audio, llm_api_name)
- 
 
-# Step 1, check_correctness 检查标准计算图中每一步的正确性
+
 chat_1 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_1))
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%problem%", input_data["problem"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data["audio_text"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%standard_graph%", standard_graph)
-if "checked_std_graph" in input_data and use_existing_data_yaml:
-	print(">>> Using existing [check_correctness] <<<")
-else:
-	print(">>> Step 1 check_correctness <<<")
-	input_data["checked_std_graph"] = call_llm_api(chat_1, llm_api_name, True)
-chat_1.append({"role": "assistant", "content": input_data["checked_std_graph"]})
-
-# 保存标注后的计算图到 json
-output_json_path = os.path.join(os.getcwd(), "results", input_filename+"_checked_std.json")
-with open(output_json_path, 'w') as file:
-	try:
-		input_data["checked_std_graph"] = input_data["checked_std_graph"].replace("```json", "")
-		input_data["checked_std_graph"] = input_data["checked_std_graph"].replace("```", "")
-		json.dump(json.loads(input_data["checked_std_graph"]), file, indent=4, ensure_ascii=False)
-		print(f">>> 标注后的计算图 saved to json file.")
-	except Exception as e:
-		print("!! 标注后的计算图 is not a json string.")
-		print(e)
-
-chat_2 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_2))
-chat_2[-1]["content"] = chat_2[-1]["content"].replace("%problem%", input_data["problem"])
-chat_2[-1]["content"] = chat_2[-1]["content"].replace("%audio_text%", input_data["audio_text"])
-chat_2[-1]["content"] = chat_2[-1]["content"].replace("%written_text%", input_data["written_text"])
-chat_2[-1]["content"] = chat_2[-1]["content"].replace("%checked_std_graph%", input_data["checked_std_graph"])
-
-
-checked_std_graph = json.loads(input_data["checked_std_graph"])
-for item in checked_std_graph['nodes']:
-	if item.get('correctness') == 'incorrect':
-		chat_2_copy = copy.deepcopy(chat_2)
-		print(f">>> 节点 {item['id']} 错因分析 <<<")
+for item in standard_graph_json['nodes']:
+	# if item['id'] < 1000:
+	if item['id'] == 18:
+		chat_1_copy = copy.deepcopy(chat_1)
+		print(f">>> 节点 {item['id']} 判断 & 错因分析 <<<")
 		print("---------------------------------------")
-		chat_2_copy[-1]["content"] = chat_2_copy[-1]["content"].replace("%node_info%", f"{item['id']}: {item['content']}")
-		call_llm_api(chat_2_copy, llm_api_name)
+		chat_1_copy[-1]["content"] = chat_1_copy[-1]["content"].replace("%node_id%", f"{item['id']}")
+		chat_1_copy[-1]["content"] = chat_1_copy[-1]["content"].replace("%node_content%", f"{item['content']}")
+		converter.chat2rawfile(chat_1_copy, "temp.txt")
+		call_llm_api(chat_1_copy, llm_api_name, True)
 
 
-# write into yaml file
-with open(cache_path, 'w') as file:
-	yaml.dump(input_data, file, default_flow_style=False, allow_unicode=True)
-	print(f">>> results saved to cache yaml file.")
+
+
+
+
+
+
+# # Step 1, check_correctness 检查标准计算图中每一步的正确性
+# chat_1 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_1))
+# chat_1[-1]["content"] = chat_1[-1]["content"].replace("%problem%", input_data["problem"])
+# chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+# chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
+# chat_1[-1]["content"] = chat_1[-1]["content"].replace("%standard_graph%", standard_graph)
+# if "checked_std_graph" in input_data and use_existing_data_yaml:
+# 	print(">>> Using existing [check_correctness] <<<")
+# else:
+# 	print(">>> Step 1 check_correctness <<<")
+# 	input_data["checked_std_graph"] = call_llm_api(chat_1, llm_api_name, True)
+# chat_1.append({"role": "assistant", "content": input_data["checked_std_graph"]})
+
+# # 保存标注后的计算图到 json
+# output_json_path = os.path.join(os.getcwd(), "results", input_filename+"_checked_std.json")
+# with open(output_json_path, 'w') as file:
+# 	try:
+# 		input_data["checked_std_graph"] = input_data["checked_std_graph"].replace("```json", "")
+# 		input_data["checked_std_graph"] = input_data["checked_std_graph"].replace("```", "")
+# 		json.dump(json.loads(input_data["checked_std_graph"]), file, indent=4, ensure_ascii=False)
+# 		print(f">>> 标注后的计算图 saved to json file.")
+# 	except Exception as e:
+# 		print("!! 标注后的计算图 is not a json string.")
+# 		print(e)
+
+# chat_2 = converter.rawfile2chat(os.path.join(os.getcwd(), dir_name, step_2))
+# chat_2[-1]["content"] = chat_2[-1]["content"].replace("%problem%", input_data["problem"])
+# chat_2[-1]["content"] = chat_2[-1]["content"].replace("%audio_text%", input_data["audio_text"])
+# chat_2[-1]["content"] = chat_2[-1]["content"].replace("%written_text%", input_data["written_text"])
+# chat_2[-1]["content"] = chat_2[-1]["content"].replace("%checked_std_graph%", input_data["checked_std_graph"])
+
+
+# checked_std_graph = json.loads(input_data["checked_std_graph"])
+# for item in checked_std_graph['nodes']:
+# 	if item.get('correctness') == 'incorrect':
+# 		chat_2_copy = copy.deepcopy(chat_2)
+# 		print(f">>> 节点 {item['id']} 错因分析 <<<")
+# 		print("---------------------------------------")
+# 		chat_2_copy[-1]["content"] = chat_2_copy[-1]["content"].replace("%node_info%", f"{item['id']}: {item['content']}")
+# 		call_llm_api(chat_2_copy, llm_api_name)
+
+
+# # write into yaml file
+# with open(cache_path, 'w') as file:
+# 	yaml.dump(input_data, file, default_flow_style=False, allow_unicode=True)
+# 	print(f">>> results saved to cache yaml file.")

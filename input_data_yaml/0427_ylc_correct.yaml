@@ -56,12 +56,12 @@ written_text: '(1)
     & \text { 直线方程： } y=k(x-a) \\
     & A\left(x_1, y_1\right), B\left(x_2, y_2\right) \\
     & k^2 x^2-\left(2 a k^2+4\right) x+k^2 a^2=0 \\
-    & \Delta=16 a k^2+16>0 \\
-    & a k^2+1>0 \\
+    & \Delta = 16ak^2+16 > 0 \\
+    & ak^2+1 > 0 \\
     & |A F|=x_1+1,|B F|=x_2+1 \\
-    & \frac{1}{|A F|}+\frac{1}{\mid B F-1}=\frac{2 a+2+\frac{4}{k^2}}{2 a+a^2+1+\frac{4}{k^2}} \\
+    & \frac{1}{|AF|}+\frac{1}{|BF|}=\frac{2a+2+\frac{4}{k^2}}{2a+a^2+1+\frac{4}{k^2}} \\
     & 2 a+2=2 a+a^2+1 \\
-    & a=1 \text { 或 }-1 \\
+    & a=1 或 -1 \\
     & a=-1
     \end{aligned}
     $$'
