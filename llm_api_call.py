@@ -15,10 +15,15 @@ import copy
 # 每一步耗时在 30s 左右，总流程一分半，别急
 
 input_folder = "input_data_yaml"
-input_filename = "0427_ylc_correct"
+input_filename = "0427_ylc_wrong1"
 thinkaloud_chunk = False 	         # 原始的语音转文字文本是否分段处理
 llm_api_name = "azure"               # "azure", "openai", "glm"
 use_existing_data_yaml = True        # 是否使用 yaml 文件中已有的中间结果
+
+# print thest parameters
+print(">>> Parameters <<<")
+print(f"input_dir: {input_folder}/{input_filename}.yaml")
+print(f"llm_api_name: {llm_api_name}")
 
 std_graph_path = os.path.join(os.getcwd(), input_folder, "standard_graph_new.json")
 input_path = os.path.join(os.getcwd(), input_folder, input_filename+".yaml")
@@ -147,8 +152,8 @@ chat_1[-1]["content"] = chat_1[-1]["content"].replace("%audio_text%", input_data
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%written_text%", input_data["written_text"])
 chat_1[-1]["content"] = chat_1[-1]["content"].replace("%standard_graph%", standard_graph)
 for item in standard_graph_json['nodes']:
-	# if item['id'] < 1000:
-	if item['id'] == 18:
+	if item['id'] < 1000:
+	# if item['id'] == 18:
 		chat_1_copy = copy.deepcopy(chat_1)
 		print(f">>> 节点 {item['id']} 判断 & 错因分析 <<<")
 		print("---------------------------------------")
