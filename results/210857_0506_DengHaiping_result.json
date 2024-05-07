@@ -1,0 +1,182 @@
+[
+    {
+        "id": 1,
+        "type": "AND",
+        "dependency": [
+            1001,
+            1003
+        ],
+        "content": "f(x)的定义域:(0,+\\infty)",
+        "student_result": "定义域 x \\neq 0",
+        "analysis": "学生没有正确理解对数函数的定义域，错误地将定义域表述为 x \\neq 0，而不是正确的 (0, +\\infty)。",
+        "correctness": "incorrect"
+    },
+    {
+        "id": 2,
+        "type": "AND",
+        "dependency": [
+            1005
+        ],
+        "content": "f'(x)=2 a x+\\frac{b}{x}",
+        "student_result": "f'(x)=2 a x+\\frac{b}{x}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 3,
+        "type": "AND",
+        "dependency": [
+            1004
+        ],
+        "content": "$\\left\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}\\right.$",
+        "student_result": "$\\left\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}\\right.$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 4,
+        "type": "AND",
+        "dependency": [
+            1001,
+            1007,
+            2,
+            3
+        ],
+        "content": "$\\left\\{\\begin{array}{l}2 a+b=0 \\\\a+b \\ln 1=\\frac{1}{2}\\end{array}\\right$",
+        "student_result": "$\\left\\{\\begin{array}{l}2 a+b=0 \\\\a+b \\ln 1=\\frac{1}{2}\\end{array}\\right$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 5,
+        "type": "AND",
+        "dependency": [
+            4
+        ],
+        "content": "a = 1/2, b = -1",
+        "student_result": "a=\\frac{1}{2}, b=-1",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 6,
+        "type": "AND",
+        "dependency": [
+            1001,
+            5
+        ],
+        "content": "$f(x) = \\frac{1}{2}x^2 - \\ln x$",
+        "student_result": "$f^{\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text{'}\text: \frac{1}{2}x^2 - \frac{1}{x}$",
+        "analysis": "",
+        "correctness": "incorrect"
+    },
+    {
+        "id": 7,
+        "type": "AND",
+        "dependency": [
+            6
+        ],
+        "content": "$f'(x) = x - \\frac{1}{x}$",
+        "student_result": "f'(x)=x-\\frac{1}{x}=\\frac{x^2-1}{x}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 8,
+        "type": "AND",
+        "dependency": [
+            7
+        ],
+        "content": "$f'(x) = \\frac{x^2-1}{x}$",
+        "student_result": "f^{\textprime}(x)=x-\\frac{1}{x}=\\frac{x^2-1}{x}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 9,
+        "type": "AND",
+        "dependency": [
+            8
+        ],
+        "content": "令 f'(x)=0，即 x^2-1=0",
+        "student_result": "x 的平方减去一",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 10,
+        "type": "AND",
+        "dependency": [
+            9
+        ],
+        "content": "x = 1 或 x = -1",
+        "student_result": "它等于0的时候它的 x 等于一。",
+        "analysis": "学生没有提到 x = -1 的情况，仅得出 x = 1 的结果。",
+        "correctness": "incorrect"
+    },
+    {
+        "id": 11,
+        "type": "AND",
+        "dependency": [
+            1,
+            10
+        ],
+        "content": "x = 1",
+        "student_result": "它等于0的时候它的 x 等于一。所以在 x 等于一的时候它有极值y",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 12,
+        "type": "AND",
+        "dependency": [
+            1006,
+            8,
+            11
+        ],
+        "content": "$x \\in(0,1), f'(x)<0, f(x) 单调递减$",
+        "student_result": "(-\\infty, 1) \\downarrow",
+        "analysis": "学生在分析单调区间时，将区间错误地写为 $(-\\infty, 1)$ 而不是 $(0,1)$，这与题目的定义域不符。",
+        "correctness": "incorrect"
+    },
+    {
+        "id": 13,
+        "type": "AND",
+        "dependency": [
+            1006,
+            8,
+            11
+        ],
+        "content": "$x \\in(1,+\\infini), f'(x)>0, f(x) 单调递增$",
+        "student_result": "(1,+\textbackslash infty) \textbackslash uparrow",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 14,
+        "type": "AND",
+        "dependency": [
+            1004,
+            12,
+            13
+        ],
+        "content": "当 x=1 时, f(x) 有极小值 f(1) = 1/2，无极大值。",
+        "student_result": "极小值: \\frac{1}{2}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 0,
+        "type": "AND",
+        "dependency": [
+            5,
+            12,
+            13,
+            14
+        ],
+        "content": " 解题完成",
+        "student_result": "解题完成",
+        "analysis": "",
+        "correctness": "correct"
+    }
+]
