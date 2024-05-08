@@ -1,0 +1,55 @@
+---
+# add YAML frontmatter data here
+model: gpt-4-1106-preview
+temperature: 0.2
+stream: true
+response_format: {"type": "json_object"}
+meta:
+  credential_path: ../credential_azure.yaml
+  var_map_path: substitute_text/student_graph_test.txt
+  output_path: tmp_out/%Y-%m-%d/result.%H-%M-%S.hprompt
+  output_evaled_prompt_path: tmp_out/%Y-%m-%d/evaled.%H-%M-%S.hprompt
+---
+
+$system$
+你是一个分析学生做题思路的助手，你的任务是根据用户反馈的修改意见，修改反映学生解题过程的”计算图“。
+
+所谓的”计算图“用 json 格式表示，它的每一个节点表示了解题过程中出现的中间计算结果。节点之间的边这些信息在计算上的依赖关系。比如圆锥体积的计算需要前一步得到的底面积和高度，那么圆锥体积这个节点就依赖于前面底面积和高这两个节点。题目所给的所有初始条件信息，以及所需要的高中数学知识，也包括在计算图中，可能作为后续推理的依据。计算图最终有一个“解题完成”节点，它的依赖是所有完成解题的必要信息。
+
+一个计算图节点有如下几个属性:
+1. id: 节点的唯一标识符，是一个正整数
+2. content: 节点的内容，是一个字符串，表示这个节点对应的学生计算出的内容。节点内容忠实于学生的想法和书写，至少学生认为他的推理是正确的。
+3. student_thoughts: 学生认为的这一步的推理过程，可以从学生的笔迹记录和语音文字记录来推断。要说明这步推导依赖哪些知识和已有结果/信息，具体如何进行计算或推理的。
+4. dependency: 依赖的节点的 id 的列表，是一个整数数组，表示了所有有边直接指向当前节点的节点的 id。这个列表刻画了这一步推导在逻辑上依赖哪些已有信息。
+
+你的任务是基于修改意见，生成具体的修改步骤，用尽可能准确、程序化的语言表述。
+
+$user$
+[计算图]
+{
+    "known": [
+        { "id": 1001, "from": "given", "content": "$f(x) = ax^2 + b \\ln x$" },
+        { "id": 1002, "from": "given", "content": "f(x) 在 x=1 处有极值 1/2" },
+        { "id": 1003, "from": "knowledge", "content": "ln x 的定义域是 (0, +\\infin)" },
+        { "id": 1004, "from": "knowledge", "content": "函数极值的概念" },
+        { "id": 1005, "from": "knowledge", "content": "初等函数的导数公式" },
+        { "id": 1006, "from": "knowledge", "content": "导数与函数单调性的关系" },
+        { "id": 1007, "from": "knowledge", "content": "对数函数的计算" }
+    ],
+    "nodes": [
+        { "id": 1, "content": "f'(x)=2ax + \\frac{b}{x}", "student_thoughts": "根据导数的计算法则求出 f(x) 的导数", "dependency": [1001, 1005] },
+        { "id": 2, "content": "f'(1)=0", "student_thoughts": "因为 x=1 时 f(x) 有极值，所以导数为0", "dependency": [1002, 1004] },
+        { "id": 3, "content": "2a + b = 0", "student_thoughts": "将 f'(1)=0 代入导数表达式得到的方程", "dependency": [1, 2] },
+        { "id": 4, "content": "f(1) = \\frac{1}{2}", "student_thoughts": "根据题目信息，x=1 时 f(x) 的值为 1/2", "dependency": [1002] },
+        { "id": 5, "content": "a + b \\ln(1) = \\frac{1}{2}", "student_thoughts": "将 f(1) = \\frac{1}{2} 代入 f(x) 的表达式得到的方程", "dependency": [1001, 4, 1007] },
+        { "id": 6, "content": "\\ln(1) = 0", "student_thoughts": "根据对数函数的性质知道 ln(1) 等于 0", "dependency": [1007] },
+        { "id": 7, "content": "a = \\frac{1}{2}, b = -1", "student_thoughts": "解方程组 2a + b = 0 和 a + b \\ln(1) = \\frac{1}{2} 得到 a 和 b 的值", "dependency": [3, 5, 6] },
+        { "id": 8, "content": "f'(x) = \\frac{x^2 - 1}{x}", "student_thoughts": "将 a 和 b 的值代入导数表达式并化简", "dependency": [1, 7] },
+        { "id": 9, "content": "定义域 x \\neq 0", "student_thoughts": "根据对数函数的定义域和导数表达式确定 f'(x) 的定义域", "dependency": [1003, 8] },
+        { "id": 10, "content": "极小值: \\frac{1}{2}", "student_thoughts": "根据导数的定义和极值的概念得到极小值", "dependency": [1004] },
+        { "id": 11, "content": "(-\\infty, 1) \\downarrow", "student_thoughts": "根据导数的符号判断函数在 (-\\infty, 1) 区间的单调性", "dependency": [1006, 8] },
+        { "id": 12, "content": "(1, +\\infty) \\uparrow", "student_thoughts": "根据导数的符号判断函数在 (1, +\\infty) 区间的单调性", "dependency": [1006, 8] }
+    ]
+}
+
+修改意见：节点 10 求极小值应当挪到在判断导数在两个区间的正负性之后，而且要依赖这两个节点。
