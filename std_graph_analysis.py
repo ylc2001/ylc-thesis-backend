@@ -67,13 +67,14 @@ for item in std_graph_json['nodes']:
 current_time_str = time.strftime("%H%M%S", time.localtime())
 with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result1.json"), 'w') as file:
 	json.dump(result_list, file, ensure_ascii=False, indent=4)
-	print(f"Saved result to {input_filename}_result.json")
+	print(f"Saved result to result1.json")
 
 for i, item in enumerate(result_list):
 	if item['correctness'] != "correct":
 		prompt2_copy = copy.deepcopy(prompt2)
 		print(f">>> 2 节点 {item['id']} 错误检查 <<<")
 		print("---------------------------------------")
+
 		prompt2_copy.chat[-1]["content"] = prompt2_copy.chat[-1]["content"].replace("%node_id%", f"{item['id']}")
 		prompt2_copy.chat[-1]["content"] = prompt2_copy.chat[-1]["content"].replace("%node_dependency%", f"{item['dependency']}")
 		result_prompt = prompt2_copy.run()
@@ -95,7 +96,7 @@ for i, item in enumerate(result_list):
 current_time_str = time.strftime("%H%M%S", time.localtime())
 with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result2.json"), 'w') as file:
 	json.dump(result_list, file, ensure_ascii=False, indent=4)
-	print(f"Saved result to {input_filename}_result.json")
+	print(f"Saved result to result2.json")
 
 
 # # chain result hprompt
