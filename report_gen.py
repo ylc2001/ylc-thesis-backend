@@ -6,22 +6,21 @@ cur_dir = Path(__file__).parent
 result_folder = "results"
 problem_file = "0506_problem.txt"
 
-with open(cur_dir / 'prompts/substitute_text' / problem_file, 'r') as file:
+with open(cur_dir / 'prompts/substitute_text' / problem_file, 'r', encoding='utf-8') as file:
     content = file.read()
     blocks = re.split(r'%\w+%', content)
     std_graph_text = blocks[-1]
     std_graph_json = json.loads(std_graph_text)
 
-mistake_list = []
-# knowledge set
-related_knowledge = set()
 
 for input_file in (cur_dir / result_folder).glob('*.json'):
-    with open(input_file, 'r') as file:
+    mistake_list = []
+    related_knowledge = set()
+    with open(input_file, 'r', encoding='utf-8') as file:
         result_json = json.load(file)
 
     output_filename = input_file.stem + "_output.md"
-    with open(cur_dir / result_folder / output_filename, 'w') as output_file:
+    with open(cur_dir / result_folder / output_filename, 'w', encoding='utf-8') as output_file:
         print("### Step 1, 每一步的正确性\n", file=output_file)
         correct_node_list = []
         for node in result_json:

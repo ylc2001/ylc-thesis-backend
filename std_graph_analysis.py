@@ -21,13 +21,13 @@ problem_file = "0506_problem.txt"
 
 # 学生的笔迹和 think aloud
 input_path = os.path.join(os.getcwd(), input_folder, input_filename+".yaml")
-with open(input_path, 'r') as file:
+with open(input_path, 'r', encoding='utf-8') as file:
 	student_input_data = yaml.safe_load(file)
 
 print(">>> Parameters <<<")
 print(f"input_dir: {input_folder}/{input_filename}.yaml")
 
-with open(cur_dir / 'prompts/substitute_text' / problem_file, 'r') as file:
+with open(cur_dir / 'prompts/substitute_text' / problem_file, 'r', encoding='utf-8') as file:
     content = file.read()
     blocks = re.split(r'%\w+%', content)
     std_graph_text = blocks[-1]
