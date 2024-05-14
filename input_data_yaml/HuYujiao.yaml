@@ -44,7 +44,7 @@ think_aloud:
 
   等 x 等于 x 根号 2 的时候有 7 小值，所以。 Apa itu mini?
 
-written_text: 
+written_text: |
   \begin{aligned}
   & \text { (1)解 } \ln x>0 \\
   & \text { (2) } f^{\prime}(x)=2 a x+\frac{h}{x} \\

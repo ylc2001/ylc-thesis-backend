@@ -14,7 +14,7 @@ import re
 
 cur_dir = Path(__file__).parent
 input_folder = "input_data_yaml"
-input_filename = "0506_ZouXinhai"
+input_filename = "ZouXinhai"
 prompt1_file = "check_node_correctness.hprompt"
 prompt2_file = "check_node_errors.hprompt"
 problem_file = "0506_problem.txt"
@@ -45,8 +45,7 @@ prompt1.chat[-1]["content"] = prompt1.chat[-1]["content"].replace("%audio_text%"
 prompt1.chat[-1]["content"] = prompt1.chat[-1]["content"].replace("%written_text%", student_input_data["written_text"])
 result_list = []
 for item in std_graph_json['nodes']:
-	if item['id'] < 1000:
-	# if item['id'] == 6:
+	if item['id'] < 1000 and item['id'] > 0:
 		prompt1_copy = copy.deepcopy(prompt1)
 		print(f">>> 1 节点 {item['id']} 判断 & 分析 <<<")
 		print("---------------------------------------")
@@ -64,38 +63,63 @@ for item in std_graph_json['nodes']:
 			print("Error in json.loads")
 			result_list.append(result_prompt.result_str)
 
-current_time_str = time.strftime("%H%M%S", time.localtime())
-with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result1.json"), 'w') as file:
-	json.dump(result_list, file, ensure_ascii=False, indent=4)
-	print(f"Saved result to result1.json")
+updated_result_list = copy.deepcopy(result_list)
 
+# current_time_str = time.strftime("%m%d_%H%M%S", time.localtime())
+# with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result1.json"), 'w') as file:
+# 	json.dump(result_list, file, ensure_ascii=False, indent=4)
+# 	print(f"Saved result to result1.json")
+
+prompt2.chat[-1]["content"] = prompt2.chat[-1]["content"].replace("%student_graph%", json.dumps(result_list, ensure_ascii=False, indent=4))
 for i, item in enumerate(result_list):
-	if item['correctness'] != "correct":
+	if item['correctness'] == "incorrect":
 		prompt2_copy = copy.deepcopy(prompt2)
 		print(f">>> 2 节点 {item['id']} 错误检查 <<<")
 		print("---------------------------------------")
 
 		prompt2_copy.chat[-1]["content"] = prompt2_copy.chat[-1]["content"].replace("%node_id%", f"{item['id']}")
-		prompt2_copy.chat[-1]["content"] = prompt2_copy.chat[-1]["content"].replace("%node_dependency%", f"{item['dependency']}")
+		dependency_str = "["
+		for dep in item['dependency']:
+			try:
+				for node in result_list:
+					if node['id'] == dep and node['id'] < 1000:
+						dependency_str += "{"
+						dependency_str += f"id: {dep}, student_result: {node['student_result']}, "
+						dependency_str += f"correctness: {node['correctness']}, "
+						dependency_str += "}, "
+						break
+				for node in std_graph_json['nodes']:
+					if node['id'] == dep and node['id'] > 1000:
+						dependency_str += "{"
+						dependency_str += f"id: {dep}, from: {node['from']}, content: {node['content']}, "
+						dependency_str += "}, "
+						break
+			except Exception as e:
+				print(e)
+				print(f"Error in dependency_str, dep: {dep}")
+		dependency_str += "]"
+		prompt2_copy.chat[-1]["content"] = prompt2_copy.chat[-1]["content"].replace("%node_dependency%", dependency_str)
+
+
 		result_prompt = prompt2_copy.run()
 		result_prompt.chat[-1]["content"] = result_prompt.chat[-1]["content"].replace("```json", f"")
 		result_prompt.chat[-1]["content"] = result_prompt.chat[-1]["content"].replace("```", f"")
 		print(result_prompt.result_str)
 		try: 
 			updated_result = json.loads(result_prompt.result_str)
-			result_list[i] = updated_result
+			updated_result_list[i] = updated_result
 		except Exception as e:
 			print(e)
 			print("Error in json.loads")
-			result_list[i] = result_prompt.result_str
+			updated_result_list[i] = result_prompt.result_str
 
 		
 
 
 # save reuslt list
-current_time_str = time.strftime("%H%M%S", time.localtime())
-with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result2.json"), 'w') as file:
-	json.dump(result_list, file, ensure_ascii=False, indent=4)
+current_time_str = time.strftime("%m%d_%H%M%S", time.localtime())
+with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result.json"), 'w') as file:
+	json.dump(updated_result_list, file, ensure_ascii=False, indent=4)
 	print(f"Saved result to result2.json")
 
 

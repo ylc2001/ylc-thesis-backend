@@ -7,8 +7,8 @@ response_format: {"type": "json_object"}
 meta:
   credential_path: ../credential_azure.yaml
   var_map_path: substitute_text/0506_problem.txt
-  output_path: tmp_out/%Y-%m-%d/result.%H-%M-%S.hprompt
-  output_evaled_prompt_path: tmp_out/%Y-%m-%d/evaled.%H-%M-%S.hprompt
+  # output_path: tmp_out/%Y-%m-%d/result.%H-%M-%S.hprompt
+  output_evaled_prompt_path: tmp_out/%Y-%m-%d_1/evaled.%H-%M-%S.hprompt
 ---
 
 $system$

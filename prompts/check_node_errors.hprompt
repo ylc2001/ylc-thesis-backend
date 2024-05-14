@@ -6,9 +6,9 @@ stream: true
 response_format: {"type": "json_object"}
 meta:
   credential_path: ../credential_azure.yaml
-  var_map_path: substitute_text/step_2_test.txt
+  var_map_path: substitute_text/0506_problem.txt
   output_path: tmp_out/%Y-%m-%d/result.%H-%M-%S.hprompt
-  output_evaled_prompt_path: tmp_out/%Y-%m-%d/evaled.%H-%M-%S.hprompt
+  output_evaled_prompt_path: tmp_out/%Y-%m-%d_2/evaled.%H-%M-%S.hprompt
 ---
 
 $system$
@@ -23,7 +23,7 @@ $system$
 2. content: 节点的内容，是一个字符串，表示这个节点应当计算出的内容。在标准的计算图中，节点的 content 字段认为是绝对正确的。
 3. dependency: 依赖的节点的 id 的列表，是一个整数数组，表示了所有有边直接指向当前节点的节点的 id。这个列表反映了要完成当前节点的推导，在逻辑上或计算上所依赖的所有前置节点。
 4. student_result: 学生解题过程中的手写内容或讲述的文本内容中的相关片段，按原文抄写过来。
-5. analysis: 错误原因的分析，如果 correctness 为 incorrect，你需要在这里给出错误原因的分析；如果 correctness 为 unknown，你也要在这里进行分析，说明学生具体如何没做这步推导、缺了什么信息。如果学生这一步做对了(correct)，这里就为空。
+5. analysis: 错误原因的分析，如果 correctness 为 incorrect，这里是错误原因的分析；如果 correctness 为 unknown，这里则是对于学生具体如何没做这步推导、缺了什么信息的分析说明。如果学生这一步做对了(correct)，这里就为空。
 6. reasoning_correctness: 学生这一步推导本身的正确性, True or False。
 7. result_correctness: 这一步的结果是否符合标答, True or False。
 
@@ -34,7 +34,6 @@ $system$
 你要用 json 格式给出输出，输出的格式要求如下：
 {
     "id": "（节点的 id，不变）",
-    "type": "（节点的类型，不变）",
     "dependency": "（节点的依赖，不变）",
     "content": "（节点的内容，不变）",
     "student_result": "（学生的手写内容中的相关片段，不变）",
@@ -52,6 +51,6 @@ $user$
 
 关注上述"标注后的标准图"中的节点 %node_id% ， 学生这一步的结果和标准答案不符。
 
-学生的错误是由于学生在这步犯了错，还是由于这步推导所依赖的前置某个节点错误导致推导结果和正确答案不符？你需要考虑这步推导所依赖的节点信息，包括标准答案和学生的结果，才能进行这一判断。这步推导依赖的信息有： %node_dependency%
+学生的错误是由于学生在这步犯了错，还是由于这步推导所依赖的前置某个节点错误导致推导结果和正确答案不符？你需要考虑这步推导所依赖的节点信息，包括标准答案和学生的结果，并分析其中的逻辑关系，才能进行这一判断。学生的这步推导依赖的信息（学生已有的推导结果）有： %node_dependency%。如果这一步误是由于学生所依赖的前置节点的计算错误导致的，而基于这些信息进行的推导结果是正确的，你应该认为学生这步推导是正确的，reasoning_correctness = true。反之，如果即使是依赖已有的这些信息，这步推导本身也出了错，则 reasoning_correctness = false。
 
 按格式要求以 json 格式输出这个节点的分析输出。
