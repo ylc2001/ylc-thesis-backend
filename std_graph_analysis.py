@@ -118,9 +118,10 @@ for i, item in enumerate(result_list):
 
 # save reuslt list
 current_time_str = time.strftime("%m%d_%H%M%S", time.localtime())
-with open(os.path.join(os.getcwd(), "results", current_time_str + "_" + input_filename+"_result.json"), 'w') as file:
+save_filename = current_time_str + "_" + input_filename+"_result.json"
+with open(os.path.join(os.getcwd(), "results", save_filename), 'w', encoding='utf-8') as file:
 	json.dump(updated_result_list, file, ensure_ascii=False, indent=4)
-	print(f"Saved result to result2.json")
+	print(f"Saved result to {save_filename}")
 
 
 # # chain result hprompt
