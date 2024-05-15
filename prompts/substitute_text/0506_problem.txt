@@ -17,7 +17,7 @@
         { "id": 1, "content": "f(x)的定义域:$(0,+\\infty)$", "dependency": [1001, 1003], "description": "观察函数各个部分对 x 的取值要求，写出定义域" },
         { "id": 2, "content": "$f'(x)=2 a x+\\frac{b}{x}$", "dependency": [1005], "description": "求 f(x) 的导数"},
         { "id": 3, "content": "$\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}.$", "dependency": [1004], "description": "按题意列出方程组"},
-        { "id": 4, "content": "$\\{\\begin{array}{l}2 a+b=0 \\\\a+b \\ln 1= a+0 =\\frac{1}{2}\\end{array}$", "dependency": [1001, 1007, 2, 3], "description": "参考 f(x) 和 f'(x)，列出上一步的方程组"},
+        { "id": 4, "content": "$\\{\\begin{array}{l}2 a+b=0 \\\\ a =\\frac{1}{2}\\end{array}$", "dependency": [1001, 1007, 2, 3], "description": "参考 f(x) 和 f'(x)，列出上一步的方程组"},
         { "id": 5, "content": "a = 1/2, b = -1", "dependency": [4], "description": "解方程得到 a, b 的值"},
         { "id": 6, "content": "$f(x) = \\frac{1}{2}x^2 - \\ln x$", "dependency": [1001, 5], "description": "将 a, b 的值代入f(x)表达式"},
         { "id": 7, "content": "$f'(x) = x - \\frac{1}{x}$", "dependency": [6], "description": "求得确定 a, b 的值后的 f(x) 的导数" },

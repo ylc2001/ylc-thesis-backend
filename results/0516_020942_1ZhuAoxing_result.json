@@ -1,0 +1,155 @@
+[
+    {
+        "id": 1,
+        "dependency": [
+            1001,
+            1003
+        ],
+        "content": "f(x)的定义域:$(0,+\\infty)$",
+        "student_result": "定义域 $(0, +\\infin)$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 2,
+        "dependency": [
+            1005
+        ],
+        "content": "$f'(x)=2 a x+\\frac{b}{x}$",
+        "student_result": "f'(x) = 2ax + \\frac{b}{x}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 3,
+        "dependency": [
+            1004
+        ],
+        "content": "$\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}.$",
+        "student_result": "$\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 4,
+        "dependency": [
+            1001,
+            1007,
+            2,
+            3
+        ],
+        "content": "$\\{\\begin{array}{l}2 a+b=0 \\\\ a =\\frac{1}{2}\\end{array}$",
+        "student_result": "$f'(1) = 2a + b = 0$\n$f(1) = a = \\frac{1}{2}$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 5,
+        "dependency": [
+            4
+        ],
+        "content": "a = 1/2, b = -1",
+        "student_result": "a = \\frac{1}{2}, b = -1",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 6,
+        "dependency": [
+            1001,
+            5
+        ],
+        "content": "$f(x) = \\frac{1}{2}x^2 - \\ln x$",
+        "student_result": "f(x) = \\frac{1}{2}x^2 - \\ln x",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 7,
+        "dependency": [
+            6
+        ],
+        "content": "$f'(x) = x - \\frac{1}{x}$",
+        "student_result": "f'(x) = x - \\frac{1}{x}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 8,
+        "dependency": [
+            7
+        ],
+        "content": "$f'(x) = \\frac{x^2-1}{x}$",
+        "student_result": "f'(x) = x - \\frac{1}{x}",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 9,
+        "dependency": [
+            8
+        ],
+        "content": "令 f'(x)=0，即 x^2-1=0",
+        "student_result": "令 f'(x) = 0\nx - \\frac{1}{x} = 0\nx^2 - 1 = 0",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 10,
+        "dependency": [
+            9
+        ],
+        "content": "x = 1 或 x = -1",
+        "student_result": "x = \\pm 1",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 11,
+        "dependency": [
+            1,
+            10
+        ],
+        "content": "x = 1",
+        "student_result": "x = 1",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 12,
+        "dependency": [
+            1006,
+            8,
+            11
+        ],
+        "content": "$x \\in(0,1), f'(x)<0, f(x) 单调递减$",
+        "student_result": "然后第二个问题应该是 0 到 1 的时候，他应该是那个在这个单调递减",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 13,
+        "dependency": [
+            1006,
+            8,
+            11
+        ],
+        "content": "$x \\in(1,+\\infini), f'(x)>0, f(x) 单调递增$",
+        "student_result": "然后第二个问题应该是 0 到 1 的时候，他应该是那个在这个单调递减，然后是他这个 1 到正无穷是单调递增，这个单调区间的 0 到 1 是单调递减，然后所以一的时候它应该是有极小值。",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 14,
+        "dependency": [
+            1004,
+            12,
+            13
+        ],
+        "content": "当 x=1 时, f(x) 有极小值 f(1) = 1/2，无极大值。",
+        "student_result": "然后所以这个 f(1) 就等于二分之一减一，然后它的这个极小值是 -1/2，然后它没有极大值啊。",
+        "analysis": "学生在计算 f(1) 的值时犯了错误，错误地将 f(1) 计算为 1/2 - 1，即 -1/2，而不是正确的极小值 1/2。",
+        "reasoning_correctness": false,
+        "result_correctness": false
+    }
+]
