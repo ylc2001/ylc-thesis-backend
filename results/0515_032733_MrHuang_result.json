@@ -1,0 +1,154 @@
+[
+    {
+        "id": 1,
+        "dependency": [
+            1001,
+            1003
+        ],
+        "content": "f(x)的定义域:$(0,+\\infty)$",
+        "student_result": "定义域:(0,+\textbackslash infty) .",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 2,
+        "dependency": [
+            1005
+        ],
+        "content": "$f'(x)=2 a x+\\frac{b}{x}$",
+        "student_result": "$f'(x)=2 a x+\\frac{b}{x}$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 3,
+        "dependency": [
+            1004
+        ],
+        "content": "$\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}.$",
+        "student_result": "$\\left\\{\\begin{array}{l}f'(1)=0 \\\\ f(1)=\\frac{1}{2}\\end{array}\\right.$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 4,
+        "dependency": [
+            1001,
+            1007,
+            2,
+            3
+        ],
+        "content": "$\\{\\begin{array}{l}2 a+b=0 \\\\a+b \\ln 1= a+0 =\\frac{1}{2}\\end{array}$",
+        "student_result": "$\\therefore\\left\\{\\begin{array}{l}2 a+b=0 \\\\a+b \\ln 1=\\frac{1}{2}\\end{array}\\right.$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 5,
+        "dependency": [
+            4
+        ],
+        "content": "a = 1/2, b = -1",
+        "student_result": "b = -1, a = 1/2",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 6,
+        "dependency": [
+            1001,
+            5
+        ],
+        "content": "$f(x) = \\frac{1}{2}x^2 - \\ln x$",
+        "student_result": "$f(x) = \\frac{1}{2}x^2 - \\ln x$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 7,
+        "dependency": [
+            6
+        ],
+        "content": "$f'(x) = x - \\frac{1}{x}$",
+        "student_result": "$f'(x) = x - \\frac{1}{x}$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 8,
+        "dependency": [
+            7
+        ],
+        "content": "$f'(x) = \\frac{x^2-1}{x}$",
+        "student_result": "$f'(x) = x - \\frac{1}{x} = \\frac{x^2-1}{x}$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 9,
+        "dependency": [
+            8
+        ],
+        "content": "令 f'(x)=0，即 x^2-1=0",
+        "student_result": "令 f'(x)=0\nx^2-1 = 0",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 10,
+        "dependency": [
+            9
+        ],
+        "content": "x = 1 或 x = -1",
+        "student_result": "x = 1 或 -1",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 11,
+        "dependency": [
+            1,
+            10
+        ],
+        "content": "x = 1",
+        "student_result": "x = 1 或 -1",
+        "analysis": "学生在解方程 x^2-1=0 时得到了两个解 x = 1 或 x = -1，然后根据函数的定义域 (0, +∞)，正确地舍去了不在定义域内的解 x = -1，保留了正确的解 x = 1。",
+        "correctness": "correct"
+    },
+    {
+        "id": 12,
+        "dependency": [
+            1006,
+            8,
+            11
+        ],
+        "content": "$x \\in(0,1), f'(x)<0, f(x) 单调递减$",
+        "student_result": "$x \\in(0,1) \\quad f'(x)<0 \\therefore f(x) \\searrow$",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 13,
+        "dependency": [
+            1006,
+            8,
+            11
+        ],
+        "content": "$x \\in(1,+\\infini), f'(x)>0, f(x) 单调递增$",
+        "student_result": "x 在 1 到正无穷大这个区间上，导函数是正的，所以 f(x) 在这个区间上就是增函数",
+        "analysis": "",
+        "correctness": "correct"
+    },
+    {
+        "id": 14,
+        "dependency": [
+            1004,
+            12,
+            13
+        ],
+        "content": "当 x=1 时, f(x) 有极小值 f(1) = 1/2，无极大值。",
+        "student_result": "当 x=1 时, f(x) 有极小值 f(1) = 1/2，无极大值。",
+        "analysis": "",
+        "correctness": "correct"
+    }
+]

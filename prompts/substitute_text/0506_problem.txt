@@ -12,7 +12,7 @@
         { "id": 1004, "from":"knowledge", "content": "函数极值的概念"},
         { "id": 1005, "from":"knowledge", "content": "初等函数的导数公式"},
         { "id": 1006, "from":"knowledge", "content": "导数与函数单调性的关系"},
-        { "id": 1007, "from":"knowledge", "content": " 对数函数的计算"},
+        { "id": 1007, "from":"knowledge", "content": "对数函数的计算"},
 
         { "id": 1, "content": "f(x)的定义域:$(0,+\\infty)$", "dependency": [1001, 1003], "description": "观察函数各个部分对 x 的取值要求，写出定义域" },
         { "id": 2, "content": "$f'(x)=2 a x+\\frac{b}{x}$", "dependency": [1005], "description": "求 f(x) 的导数"},

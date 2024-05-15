@@ -37,21 +37,14 @@ audio_text: |
 
     就是现在理解了，就是极大值，就是为-1，就是这个图像可能是极大值在这个波浪里面是小的，所以，嗯，现在是对的。 
 
-problem: '已知函数 $f(x) = ax^2 + b \ln x$ 在 x=1 处有极值 1/2.
-
-    (1) 求 a, b 的值;
-
-    (2) 求出 f(x) 的单调区间，并求极值.
-    '
-
 think_aloud: 
 
 written_text: |
     \begin{aligned}
     & \text { (1) 求a, b的值; } \\
     & f(x)=a=\frac{1}{2} \text {. } \\
-    & f^{\prime}(x)=2 a x+b \frac{1}{x} \\
-    & f^{\prime}(1)=1+b=0 \quad b=-1
+    & f'(x)=2 a x+b \frac{1}{x} \\
+    & f'(1)=1+b=0 \quad b=-1
     \end{aligned}
 
     \left\{\begin{array}{l}
@@ -63,7 +56,7 @@ written_text: |
     & f(x)=\frac{1}{2} x^2-\ln x \\
     & f(x)=x-\frac{1}{x}=\frac{x^2-x}{x} \\
     & \text { 定义域 }(0,+ \infty) \\
-    & \text { 令 } f^{\prime}(x)=0 \text { 则 } x^2-x=0 \\
+    & \text { 令 } f'(x)=0 \text { 则 } x^2-x=0 \\
     & x=1 \text { 或 } x=0 \\
     \end{aligned}
 

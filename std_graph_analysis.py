@@ -14,7 +14,7 @@ import re
 
 cur_dir = Path(__file__).parent
 input_folder = "input_data_yaml"
-input_filename = "ZouXinhai"
+input_filename = "1ZhuAoxing"
 prompt1_file = "check_node_correctness.hprompt"
 prompt2_file = "check_node_errors.hprompt"
 problem_file = "0506_problem.txt"
